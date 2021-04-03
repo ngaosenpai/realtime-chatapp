@@ -7,6 +7,7 @@ const session = require('express-session');
 const validator = require('express-validator');
 const passport = require('passport');
 const cookie = require('cookie-parser');
+const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 
 const app = express();
