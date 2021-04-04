@@ -22,6 +22,18 @@ app.use(session({
 }));
 app.use(cookie(process.env.COOKIE_SECRET))
 
+mongoose.connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true, 
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+})
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function cb() {
+  console.log("Now connected to MongoDB!")
+});
+
 const homeRoute = require('./routes/home.route')
 const authsRoute = require('./routes/auths.route')
 
