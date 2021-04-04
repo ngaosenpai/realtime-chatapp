@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { response } = require('express');
+const jwt = require('jsonwebtoken');
 
 // const { User } = require('../models')
 const User = require('../models/user.model')
@@ -27,10 +27,13 @@ const handleErrors = (err) => {
     return errors;
 }
 
-const generateAccessToken = (user) => jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, optionSignToken)
-const generateRefreshToken = (user) => jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
+// const generateAccessToken = (user) => jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, optionSignToken)
+const generateAccessToken = (user) => jwt.sign({user}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: tokenAge })
+const generateRefreshToken = (user) => jwt.sign({user}, process.env.REFRESH_TOKEN_SECRET)
 
 let refreshTokens = []
+const tokenAge = 60
+// const tokenAge = 60 * 60 * 24 * 30
 
 module.exports.index = (req, res) => {
     res.redirect('/auths/login')
@@ -53,9 +56,12 @@ module.exports.login = async (req, res) => {
                     const user = response[0];
                     const accessToken = generateAccessToken(user)
                     const refreshToken = generateRefreshToken(user)
-                    
                     refreshTokens.push(refreshToken)
 
+                    res.cookie('jwt', accessToken, { 
+                        httpOnly: true, 
+                        maxAge: tokenAge * 1000 
+                    });
                     res.json({
                         code: 200,
                         message: 'Login successfully',
@@ -141,12 +147,25 @@ module.exports.logout = (req, res) => {
 
 // JWT
 module.exports.refreshToken = (req, res) => {
-    const refreshToken = req.body.token;
+    const refreshToken = req.body.refreshToken;
     if (refreshToken == null) return res.sendStatus(401);
-    
+    if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403)
+        const accessToken = generateAccessToken(user)
+        res.json({
+            code: 201,
+            message: "Refreshing token Successfully",
+            accessToken
+        })
+    })
 }
 
 module.exports.deleteToken = (req, res) => {
-    refreshTokens = refreshTokens.filter(token => token !== req.body.token)
-    res.sendStatus(204)
+    refreshTokens = refreshTokens.filter(token => token !== req.body.accessToken)
+    res.cookie('jwt', '', { maxAge: 1 });
+    res.json({
+        code: 204,
+        message: "Deleting Token Successfully"
+    })
 }
