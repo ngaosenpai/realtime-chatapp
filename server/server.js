@@ -37,8 +37,14 @@ db.once('open', function cb() {
 const homeRoute = require('./routes/home.route')
 const authsRoute = require('./routes/auths.route')
 
-app.use('/', homeRoute)
+const {authenticateToken} = require('./middlewares')
+const functionAuthenticateToken = require('./middlewares/auths/authenticateToken')
+
+// console.log(authenticateToken)
+// console.log(functionAuthenticateToken)
+
 app.use('/auths', authsRoute)
+app.use('/', authenticateToken, homeRoute)
 
 const PORT = process.env.PORT || 3000;
 
