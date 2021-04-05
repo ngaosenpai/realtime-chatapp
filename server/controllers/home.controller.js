@@ -1,3 +1,3 @@
 module.exports.index = (req, res) => {
-    res.send('Welcome home')
+    res.send('index')
 }
