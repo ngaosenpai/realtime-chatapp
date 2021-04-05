@@ -145,7 +145,7 @@ function UserList(props) {
         }
     ]
     return (
-        <div className="user-list">
+        <div className="user-list" style={{height: 'calc(100vh - 128px)'}}>
             {test.map(item => <UserItem data={item}/>)}
         </div>
     );
