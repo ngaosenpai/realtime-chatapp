@@ -38,7 +38,7 @@ function ChatMain(props) {
                 <UnorderedListOutlined className="chat-main__header__icon-close"/>
             </div>
             <div className="chat-main__content" style={{height: 'calc(100vh - 200px)'}}>
-                {chats.map((chat, i) => <p style={{
+                {chats.map((chat, i) => <p key={i} style={{
                     alignSelf : i%2===0? 'flex-start' : 'flex-end'
                 }}>{chat.content}</p>)}
             </div>
