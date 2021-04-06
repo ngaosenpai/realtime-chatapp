@@ -18,7 +18,7 @@ function App() {
           <Route exact path="/register">
             <p>Register page</p>
           </Route>
-          <Route exact path="/">
+          <Route path="/">
             <Main />
           </Route>
         </Switch>
