@@ -1,5 +1,8 @@
 import React from 'react';
 import './ChatMain.scss'
+
+import { UnorderedListOutlined } from '@ant-design/icons'
+
 function ChatMain(props) {
     const chats = [
         {content:"asasasas asdas shja asdas asd asd asdas d"},
@@ -32,10 +35,11 @@ function ChatMain(props) {
                 <div className="chat-main__header__name">
                     <p>A user</p>
                 </div>
+                <UnorderedListOutlined className="chat-main__header__icon-close"/>
             </div>
             <div className="chat-main__content" style={{height: 'calc(100vh - 200px)'}}>
                 {chats.map((chat, i) => <p style={{
-                    alignSelf : i%2==0? 'flex-start' : 'flex-end'
+                    alignSelf : i%2===0? 'flex-start' : 'flex-end'
                 }}>{chat.content}</p>)}
             </div>
             <div className="chat-main__feature">

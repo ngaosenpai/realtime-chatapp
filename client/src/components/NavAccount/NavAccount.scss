@@ -16,6 +16,13 @@
             font-size: 24px;
             font-weight: bold;
             padding: 10px;
+            flex-grow: 1;
+        }
+        &__icon-close{
+            display: none;
+            @media screen and (max-width: 360px) {
+                display: inline-block;
+            }
         }
     }
     &__search{

@@ -8,7 +8,7 @@ function UserList(props) {
         {
             src: 'https://picsum.photos/200', 
             name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
+            msg: "aa",
             time: "1m"
         },
         {
