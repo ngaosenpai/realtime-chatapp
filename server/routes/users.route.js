@@ -4,7 +4,7 @@ const controller = require('../controllers/users.controller');
 
 router.route('/')
     .get(controller.index)
-router.route('/profile')
+router.route('/:id')
     .get(controller.profile)
     .post(controller.edit)
 
