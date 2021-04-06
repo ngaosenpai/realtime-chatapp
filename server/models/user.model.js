@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const uniqueErrorValidator = require('mongoose-unique-validator');
 
 const UserSchema = new mongoose.Schema({
 	locals: {
@@ -35,7 +36,7 @@ const UserSchema = new mongoose.Schema({
 	}
 
 });
-
+UserSchema.plugin(uniqueErrorValidator)
 UserSchema.pre('save', async function(next) {
 	let user = this;
 	const salt = await bcrypt.genSalt(10)
