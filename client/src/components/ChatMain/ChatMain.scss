@@ -27,6 +27,12 @@
                 font-weight: bold;
             }
         }
+        &__icon-close{
+            display: none;
+            @media screen and (max-width: 360px) {
+                display: inline-block;
+            }
+        }
     }
 
     &__content{
