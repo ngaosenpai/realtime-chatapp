@@ -1,7 +1,7 @@
 .nav-account{
     padding: 15px;  
-    min-width: 300px;
-    max-width: 500px;
+    // min-width: 300px;
+    // max-width: 500px;
     width: 100%;
     &__user{
         text-align: left;
@@ -20,7 +20,7 @@
         }
         &__icon-close{
             display: none;
-            @media screen and (max-width: 360px) {
+            @media screen and (max-width: 768px) {
                 display: inline-block;
             }
         }

@@ -29,7 +29,7 @@
         }
         &__icon-close{
             display: none;
-            @media screen and (max-width: 360px) {
+            @media screen and (max-width: 768px) {
                 display: inline-block;
             }
         }
