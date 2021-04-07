@@ -144,9 +144,28 @@ function UserList(props) {
             time: "1m"
         }
     ]
+    // console.log(props)
+    const { setShouldShowMenu } = props
     return (
-        <div className="user-list" style={{height: 'calc(100vh - 128px)'}}>
-            {test.map((item, i) => <UserItem key={i} id={i} data={item}/>)}
+        <div 
+            className="user-list" 
+            style={{height: 'calc(100vh - 128px)'}}
+            onClick={() => {
+                if(setShouldShowMenu !== undefined)
+                    return setShouldShowMenu(pre => !pre)
+                else return undefined
+            }} 
+        >
+            {
+                test.map((item, i) => 
+                    <UserItem 
+                        key={i} 
+                        id={i} 
+                        data={item} 
+                        
+                    />
+                )
+            }
         </div>
     );
 }

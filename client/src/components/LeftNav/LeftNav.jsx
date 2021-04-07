@@ -10,7 +10,7 @@ function LeftNav(props) {
     return (
         <div className="left-nav" style={props.style}>
             <NavAccount setShouldShowMenu={props.setShouldShowMenu} />
-            <UserList />
+            <UserList setShouldShowMenu={props.setShouldShowMenu}/>
         </div>
     );
 }
