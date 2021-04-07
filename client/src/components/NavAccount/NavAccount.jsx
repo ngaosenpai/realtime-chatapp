@@ -9,7 +9,9 @@ function NavAccount(props) {
             <div className="nav-account__user">
                 <img src="https://picsum.photos/200" alt=""/>
                 <p>{`Chào ${user}!`}</p>
-                <CloseOutlined className="nav-account__user__icon-close"/>
+                <CloseOutlined className="nav-account__user__icon-close"
+                    onClick={() => props.setShouldShowMenu(pre => !pre)}
+                />
             </div>
             <div className="nav-account__search">
                 <input type="text" placeholder='Find new friends...'/>

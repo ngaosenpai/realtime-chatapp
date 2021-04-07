@@ -6,6 +6,8 @@ import './Main.scss'
 import LeftNav from '../LeftNav/LeftNav'
 import RightMain from '../RightMain/RightMain';
 function Main(props) {
+
+    
     return (
         <div className="main">
             <LeftNav/>

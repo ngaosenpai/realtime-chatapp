@@ -8,8 +8,8 @@ function LeftNav(props) {
 
 
     return (
-        <div className="left-nav">
-            <NavAccount />
+        <div className="left-nav" style={props.style}>
+            <NavAccount setShouldShowMenu={props.setShouldShowMenu} />
             <UserList />
         </div>
     );
