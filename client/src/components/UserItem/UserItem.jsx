@@ -17,7 +17,7 @@ function UserItem(props) {
 
                 <div className="user-item__center">
                     <div className="user-item__center__name">
-                        <p>{data.name}</p>
+                        <p>{`${data.name} ${props.id}`}</p>
                     </div>
                     <div className="user-item__center__content">
                         <div className="user-item__center__content__msg">
