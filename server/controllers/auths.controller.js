@@ -81,9 +81,14 @@ module.exports.login = async (req, res) => {
                         const accessToken = generateAccessToken(user)
                         const refreshToken = generateRefreshToken(user)
                         refreshTokens.push(refreshToken)
-                        res.cookie('jwt', accessToken, { 
+                        res.set('Authorization', ` Bearer ${accessToken}`);
+                        res.cookie('accessToken', accessToken, { 
                             httpOnly: true, 
-                            maxAge: maxAge * 1000 
+                            maxAge: maxAge * 1000
+                        });
+                        res.cookie('refreshToken', refreshToken, { 
+                            httpOnly: true, 
+                            maxAge: maxAge * 1000
                         });
                         res.json({
                             code: 200,
@@ -206,7 +211,7 @@ module.exports.refreshToken = (req, res) => {
             throw new Error('Invalid required method');
         }  
         else {
-            const refreshToken = req.body.refreshToken;
+            const refreshToken = req.cookies.refreshToken;
             if (refreshToken == null) return res.sendStatus(401);
             if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
             jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
@@ -234,10 +239,10 @@ module.exports.deleteToken = (req, res) => {
             throw new Error('Invalid required method');
         }  
         else {
-            refreshTokens = refreshTokens.filter(token => token !== req.body.accessToken)
-            const hasCookies = req.cookies ? req.cookies.jwt : false
+            refreshTokens = refreshTokens.filter(token => token !== req.cookies.refreshToken)
+            const hasCookies = req.cookies ? req.cookies.refreshToken : false
             if (hasCookies) {
-                res.cookie('jwt', '', { maxAge: 1 });
+                res.cookie('refreshToken', '', { maxAge: 1 });
             }
             res.json({
                 code: 204,
