@@ -1,10 +1,12 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 
-const User = require('../models/user.model');
+// const User = require('../models/user.model');
+const {User} = require('../models/index.model');
 
 module.exports.user_index = async (req, res) => {
     try {
+        console.log(User)    
         await User.find({})
             .then((listUsers) => {
                 if (listUsers.length > 0) {
