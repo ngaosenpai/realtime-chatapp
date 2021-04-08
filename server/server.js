@@ -22,6 +22,7 @@ app.use(session({
 }));
 app.use(cookie(process.env.COOKIE_SECRET))
 
+mongoose.set('useFindAndModify', false);
 mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true, 
     useUnifiedTopology: true,
