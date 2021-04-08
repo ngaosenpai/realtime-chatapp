@@ -10,28 +10,46 @@ const UserSchema = new mongoose.Schema({
 			unique: true,
 			sparse: true,
 			lowercase: true,
-			validate: {
-				isAsync: true,
-				validator: function(value, isValid) {
-					const self = this;
-					return self.constructor.findOne({ 'locals.username': value })
-						.exec(function(err, user){
-							if(err){
-								throw err;
-							}
-							else if(user) {
-								if(self.id === user.id) {  // if finding and saving then it's valid even for existing email
-									return isValid(true);
-								}
-								return isValid(false);  
-							}
-							else{
-								return isValid(true);
-							}
+			// validate: {
+			// 	isAsync: true,
+			// 	validator: function(value, callback) {
+			// 		const self = this;
+			// 		return self.constructor.findOne({ 'locals.username': value })
+			// 			.exec(function(err, user){
+			// 				if(err){
+			// 					throw err;
+			// 				}
+			// 				else if(user) {
+			// 					if(self.id === user.id) {  // if finding and saving then it's valid even for existing username
+			// 						return callback(true);
+			// 					}
+			// 					return callback(false);  
+			// 				}
+			// 				else{
+			// 					return callback(true);
+			// 				}
 
-						})
+			// 			})
+			// 	},
+			// 	message: `The username has already been taken`
+			// }
+			validate: {
+				validator: async function (value, callback) {
+					const self = this;
+					return new Promise(async function(resolve, reject){
+						await self.constructor.findOne({'locals.username': value})
+							.then(user => {
+								if (user) {
+									return resolve(self.id === user.id);
+								}
+								return resolve(true);
+							})
+							.catch(err => { return resolve(false); });
+					}).then(value => {
+						return value;
+					})
 				},
-				messages: `The username has already been taken`
+				message: 'The username has already been taken'
 			}
 		},
 		email: {
@@ -43,7 +61,7 @@ const UserSchema = new mongoose.Schema({
 			lowercase: true,
 			validate: {
 				isAsync: true,
-				validator: function(value, isValid) {
+				validator: function(value, callback) {
 					const self = this;
 					return self.constructor.findOne({ 'locals.email': value })
 						.exec(function(err, user){
@@ -51,21 +69,18 @@ const UserSchema = new mongoose.Schema({
 								throw err;
 							}
 							else if(user) {
-								console.log('validation')
-								console.log(self)
-								console.log(user)
 								if(self.id === user.id) {  // if finding and saving then it's valid even for existing email
-									return isValid(true);
+									return callback(true);
 								}
-								return isValid(false);  
+								return callback(false);  
 							}
 							else{
-								return isValid(true);
+								return callback(true);
 							}
 
 						})
 				},
-				messages: `The email has already been taken`
+				message: `The email has already been taken`
 			}
 		},
 		password: {

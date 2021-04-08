@@ -138,13 +138,12 @@ module.exports.user_update = async (req, res) => {
         
         let {locals: { username, email}} = newProfile,
             newUser = new User(newProfile)
-        // console.log(username, email)
-        // console.log(changes.username, changes.email)
-        // await newUser
+        await newUser.validate({'locals.username': username, 'locals.email': email}, ['locals.username', 'locals.email'])
+            .catch(err => {throw err});
         await User.findById(_id)
             .then(async (user) => {
-                await user.validate({'locals.username': username}, ['locals.username'])
-                    .catch(err => {throw err});
+                // console.log(username)
+                
                 if (user) {
                     await User.updateOne({_id}, newProfile)
                         .then(response => {
@@ -185,9 +184,6 @@ module.exports.user_update = async (req, res) => {
             .catch((err) => {throw new Error(err)})
     } catch (error) {
         if (error) {
-            console.log(error)
-            console.log(error instanceof mongoose.Error.ValidationError); // true
-            console.log(Object.keys(error.errors)); // ['name']
             res.json({
                 code: 400,
                 message: error.message
