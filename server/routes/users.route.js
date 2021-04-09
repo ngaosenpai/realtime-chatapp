@@ -9,5 +9,6 @@ router.route('/:id')
     .get(controller.user_profile)
     .put(controller.user_update)
     .delete(controller.user_delete)
-
+router.route('/token/:token')
+    .get(controller.user_token)
 module.exports = router

@@ -10,7 +10,6 @@ module.exports = authenticateToken = (req, res, next) => {
     if (accessToken == null) return res.sendStatus(401)
     jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) {
-            console.log(err);
             return res.json({
                 code: 403,
                 message: err.message
