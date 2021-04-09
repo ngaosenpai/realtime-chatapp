@@ -10,29 +10,6 @@ const UserSchema = new mongoose.Schema({
 			unique: true,
 			sparse: true,
 			lowercase: true,
-			// validate: {
-			// 	isAsync: true,
-			// 	validator: function(value, callback) {
-			// 		const self = this;
-			// 		return self.constructor.findOne({ 'locals.username': value })
-			// 			.exec(function(err, user){
-			// 				if(err){
-			// 					throw err;
-			// 				}
-			// 				else if(user) {
-			// 					if(self.id === user.id) {  // if finding and saving then it's valid even for existing username
-			// 						return callback(true);
-			// 					}
-			// 					return callback(false);  
-			// 				}
-			// 				else{
-			// 					return callback(true);
-			// 				}
-
-			// 			})
-			// 	},
-			// 	message: `The username has already been taken`
-			// }
 			validate: {
 				validator: async function (value, callback) {
 					const self = this;
@@ -60,25 +37,20 @@ const UserSchema = new mongoose.Schema({
 			sparse: true,
 			lowercase: true,
 			validate: {
-				isAsync: true,
-				validator: function(value, callback) {
+				validator: async function (value, callback) {
 					const self = this;
-					return self.constructor.findOne({ 'locals.email': value })
-						.exec(function(err, user){
-							if(err){
-								throw err;
-							}
-							else if(user) {
-								if(self.id === user.id) {  // if finding and saving then it's valid even for existing email
-									return callback(true);
+					return new Promise(async function(resolve, reject){
+						await self.constructor.findOne({'locals.username': value})
+							.then(user => {
+								if (user) {
+									return resolve(self.id === user.id);
 								}
-								return callback(false);  
-							}
-							else{
-								return callback(true);
-							}
-
-						})
+								return resolve(true);
+							})
+							.catch(err => { return resolve(false); });
+					}).then(value => {
+						return value;
+					})
 				},
 				message: `The email has already been taken`
 			}

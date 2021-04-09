@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 // const { User } = require('../models')
 const User = require('../models/user.model')
-const { optionSignToken } = require('../config/index.config')
+const { optionRefreshToken, optionAccessToken } = require('../config/index.config')
 const handleErrors = (err) => {
     // console.log(err.message, err.code);
     let errors = { email: '', password: '' };
@@ -27,7 +27,7 @@ const handleErrors = (err) => {
     return errors;
 }
 
-const generateAccessToken = (user) => jwt.sign({user}, process.env.ACCESS_TOKEN_SECRET, optionSignToken)
+const generateAccessToken = (user) => jwt.sign({user}, process.env.ACCESS_TOKEN_SECRET, optionAccessToken)
 // const generateAccessToken = (user) => jwt.sign({user}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: maxAge })
 const generateRefreshToken = (user) => jwt.sign({user}, process.env.REFRESH_TOKEN_SECRET)
 
@@ -81,9 +81,16 @@ module.exports.login = async (req, res) => {
                         const accessToken = generateAccessToken(user)
                         const refreshToken = generateRefreshToken(user)
                         refreshTokens.push(refreshToken)
-                        res.cookie('jwt', accessToken, { 
+                        res.set('Authorization', `Bearer ${accessToken}`);
+                        res.cookie('accessToken', accessToken, { 
+                            // secure: true, 
                             httpOnly: true, 
-                            maxAge: maxAge * 1000 
+                            maxAge: optionAccessToken.expiresIn * 1000
+                        });
+                        res.cookie('refreshToken', refreshToken, { 
+                            // secure: true, 
+                            httpOnly: true, 
+                            maxAge: optionRefreshToken.expiresIn * 1000
                         });
                         res.json({
                             code: 200,
@@ -206,12 +213,27 @@ module.exports.refreshToken = (req, res) => {
             throw new Error('Invalid required method');
         }  
         else {
-            const refreshToken = req.body.refreshToken;
+
+            const signedCookies = req.signedCookies; // get signed cookies
+            console.log('signed-cookies:', signedCookies);  
+            const cookies = req.cookies; // get not signed cookies
+            console.log('not-signed-cookies:', cookies);
+            // or access directly to one cookie by its name :
+            const myTestCookie = req.signedCookies.test;
+            console.log('our test signed cookie:', myTestCookie);
+
+            const refreshToken = req.cookies.refreshToken;
             if (refreshToken == null) return res.sendStatus(401);
             if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
             jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
                 if (err) return res.sendStatus(403)
                 const accessToken = generateAccessToken(user)
+                res.set('Authorization', `Bearer ${accessToken}`);
+                res.cookie('accessToken', accessToken, { 
+                    // secure: true, 
+                    httpOnly: true, 
+                    maxAge: optionAccessToken.expiresIn * 1000
+                });
                 res.json({
                     code: 201,
                     message: "Refreshing token Successfully",
@@ -234,10 +256,11 @@ module.exports.deleteToken = (req, res) => {
             throw new Error('Invalid required method');
         }  
         else {
-            refreshTokens = refreshTokens.filter(token => token !== req.body.accessToken)
-            const hasCookies = req.cookies ? req.cookies.jwt : false
+            refreshTokens = refreshTokens.filter(token => token !== req.cookies.refreshToken)
+            const hasCookies = req.cookies && req.cookies.refreshToken
             if (hasCookies) {
-                res.cookie('jwt', '', { maxAge: 1 });
+                res.clearCookie('accessToken');
+                res.clearCookie('refreshToken');
             }
             res.json({
                 code: 204,
