@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 // const User = require('../models/user.model');
 const {User} = require('../models/index.model');
@@ -220,4 +221,35 @@ module.exports.user_delete = async (req, res) => {
             message: error.message
         })
     }
+}
+
+module.exports.user_token = async (req, res) => {
+    // const authorizationHeader = req.headers.authorization
+    // const accessToken = authorizationHeader && authorizationHeader.split(' ')[1]
+    let accessToken = req.params.token
+    if (accessToken == null) return res.sendStatus(401)
+    await jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, response) => {
+        if (err) {
+            return res.json({
+                code: 403,
+                message: err.message
+            });
+        }
+        if (response) {
+            let user = response.user
+            console.log(response)
+            return res.json({
+                code: 200,
+                message: "Getting user with valid token successfully",
+                data: {
+                    _id: user._id,
+                    name: user.locals.name
+                }
+            })
+        }
+        return res.json({
+            code: 403, 
+            message: "Getting user failed with invalid token"
+        })
+    })
 }
