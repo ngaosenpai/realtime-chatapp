@@ -1,6 +1,11 @@
 // jwt signing options
-const maxAge = 60 * 5
+const maxAgeAccessToken = 5
+const maxAgeRefreshToken = 60 * 60 *  24 * 30
 
-exports.optionSignToken = {
-    expiresIn: maxAge
+exports.optionAccessToken = {
+    expiresIn: maxAgeAccessToken
+}
+
+exports.optionRefreshToken = {
+    expiresIn: maxAgeRefreshToken
 }
