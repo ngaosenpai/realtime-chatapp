@@ -8,15 +8,16 @@ import {
 } from '../redux/session/sessionActionType'
 
 
-export function* workderFetchSession(action){
+export function* workerFetchSession(action){
     
-    //get token in store
-    const token = yield select(state => state.jwt.token)
-    // start fetch session (user info)
-    yield put({type : FETCH_SESSION_START})
     try{
+        //get token in store
+        const token = yield select(state => state.jwt.token)
+        console.log("saga log: ", token)
+        // start fetch session (user info)
+        yield put({type : FETCH_SESSION_START})
         //ajax
-        const user = yield axios.post(`localhost:4000/user/${token}`)
+        const user = yield axios.post(`localhost:4000/user/token/${token}`)
         //save to store
         yield put({
             type : FETCH_SESSION_SUCCESS,
@@ -33,5 +34,5 @@ export function* workderFetchSession(action){
 }
 
 export function* watchFetchSession(){
-    yield takeEvery(FETCH_SESSION, workderFetchSession)
+    yield takeEvery(FETCH_SESSION, workerFetchSession)
 }
