@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 
 import { useSelector, useDispatch } from 'react-redux'
-import { GET_JWT } from './redux/auth/authActionType'
+import { KEEP_SESSION } from "./saga/authSessionSaga"
 
 import Main from './components/Main/Main.jsx'
 import Login from './components/Login/Login.jsx'
@@ -21,9 +21,9 @@ function App() {
   const dispatch = useDispatch()
   useEffect(() => {
     //get token from localstorage
-    dispatch({
-      type : GET_JWT
-    })
+    // dispatch({
+    //   type : KEEP_SESSION
+    // })
     //get user infor from api, use jwt above
     //...
 
