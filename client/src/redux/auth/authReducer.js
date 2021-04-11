@@ -1,5 +1,6 @@
 import { 
-    GET_JWT_LOCAL_STORAGE
+    GET_JWT_LOCAL_STORAGE,
+    CLEAR_JWT_LOCAL_STORAGE
 } from './authActionType'
 
 const initialState = {
@@ -14,6 +15,9 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 token : jwt
             }
+        
+        case CLEAR_JWT_LOCAL_STORAGE:
+            return initialState
 
         default:
             return state

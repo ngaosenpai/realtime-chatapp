@@ -13,6 +13,8 @@ import { KEEP_SESSION } from "./saga/authSessionSaga"
 
 import Main from './components/Main/Main.jsx'
 import Login from './components/Login/Login.jsx'
+import PrivateRoute from './components/Route/PrivateRoute.jsx'
+import PublicRoute from './components/Route/PublicRoute.jsx'
 
 function App() {
 
@@ -20,13 +22,8 @@ function App() {
   const user = useSelector(state => state.session)
   const dispatch = useDispatch()
   useEffect(() => {
-    //get token from localstorage
-    // dispatch({
-    //   type : KEEP_SESSION
-    // })
-    //get user infor from api, use jwt above
-    //...
 
+    dispatch({type : KEEP_SESSION})
 
   }, [])
 
@@ -40,15 +37,11 @@ function App() {
     <div className="App">
       <Router>
         <Switch >
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/register">
-            <p>Register page</p>
-          </Route>
-          <Route path="/">
-            <Main />
-          </Route>
+          <PublicRoute exact path="/login" component={Login} />
+          
+          <PublicRoute exact path="/register" component={() => (<p>Register page</p>)} />
+          
+          <PrivateRoute path="/" component={ Main } />
         </Switch>
       </Router>
     </div>

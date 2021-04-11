@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux"
-
+import { useHistory } from "react-router-dom"
 import { LOGIN } from "../../redux/login/loginActionType"
 
 import { Link } from 'react-router-dom'
@@ -8,12 +8,25 @@ import './Login.scss'
 function Login(props) {
 
     const dispatch = useDispatch()
-    const state = useSelector(state => state.login)
+    const {login, jwt, session} = useSelector(state => ({ 
+        login : state.login, 
+        jwt : state.jwt,
+        session : state.session 
+    }))
 
     const [content, setContent] = useState({
         username : "",
         password : ""
     })
+
+    const history = useHistory()
+
+    useEffect(() => {
+        if(jwt.token !== null && session.user !== null){
+
+            history.push("/")
+        }
+    }, [jwt.token, session.user]) 
 
     return (
         <div className="login-page">
@@ -27,7 +40,7 @@ function Login(props) {
                         <h2>Login now!</h2>
                     </div>
                     <div className="login-form__alert">
-                        {state.errors.map((error, i) => (<p key={i}>{error.message}</p>))}
+                        {login.errors.map((error, i) => (<p key={i}>{error.message}</p>))}
                     </div>
                     <div className="login-form__body">
                         <input 
@@ -41,7 +54,7 @@ function Login(props) {
                             onChange={e => setContent({...content, password : e.target.value})}
                         />
                         <button 
-                            disabled={state.isLoading}
+                            disabled={login.isLoading}
                             onClick={() => {
                                 console.log(content)
                                 dispatch({
