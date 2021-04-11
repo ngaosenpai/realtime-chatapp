@@ -11,11 +11,13 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const socketio = require('socket.io')
 const http = require('http')
+const cors = require('cors')
 
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
+app.use(cors({}));
 app.use('/public', express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
