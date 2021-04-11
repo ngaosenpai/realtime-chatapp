@@ -115,7 +115,8 @@ module.exports.login = async (req, res) => {
     catch (error) {
         res.status(400).json({
             code: 400,
-            message: error.message
+            message: 'Error occurs',
+            error: error.message
         })
     }
 }
@@ -130,7 +131,8 @@ module.exports.registerForm = (req, res) => {
     catch (error) {
         res.status(400).json({
             code: 400,
-            message: error.message
+            message: 'Error occurs',
+            error: error.message
         })
     }
 }
@@ -184,10 +186,11 @@ module.exports.register = async (req, res) => {
             }
         }
     }
-    catch (err) { 
-        res.json({ 
-            code: 400, 
-            message: err.message,
+    catch (error) { 
+        res.status(400).json({
+            code: 400,
+            message: 'Error occurs',
+            error: error.message
         })
     }
 }
@@ -206,10 +209,11 @@ module.exports.logout = (req, res) => {
             })
         }     
     }
-    catch (err) { 
-        res.json({ 
-            code: 400, 
-            message: err.message,
+    catch (error) { 
+        res.status(400).json({
+            code: 400,
+            message: 'Error occurs',
+            error: error.message
         })
     }
 }
@@ -250,10 +254,11 @@ module.exports.refreshToken = (req, res) => {
             })
         }
     }
-    catch (err) { 
-        res.json({ 
-            code: 400, 
-            message: err.message,
+    catch (error) { 
+        res.status(400).json({
+            code: 400,
+            message: 'Error occurs',
+            error: error.message
         })
     }
 }
@@ -276,10 +281,11 @@ module.exports.deleteToken = (req, res) => {
             })
         }
     }
-    catch (err) { 
-        res.json({ 
-            code: 400, 
-            message: err.message,
+    catch (error) { 
+        res.status(400).json({
+            code: 400,
+            message: 'Error occurs',
+            error: error.message
         })
     }
 }
