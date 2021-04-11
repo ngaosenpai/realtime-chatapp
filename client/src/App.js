@@ -13,8 +13,12 @@ import { KEEP_SESSION } from "./saga/authSessionSaga"
 
 import Main from './components/Main/Main.jsx'
 import Login from './components/Login/Login.jsx'
+
 import PrivateRoute from './components/Route/PrivateRoute.jsx'
 import PublicRoute from './components/Route/PublicRoute.jsx'
+
+import Register from './components/Register/Register.jsx'
+
 
 function App() {
 
@@ -39,9 +43,10 @@ function App() {
         <Switch >
           <PublicRoute exact path="/login" component={Login} />
           
-          <PublicRoute exact path="/register" component={() => (<p>Register page</p>)} />
+          <PublicRoute exact path="/register" component={Register} />
           
           <PrivateRoute path="/" component={ Main } />
+
         </Switch>
       </Router>
     </div>
