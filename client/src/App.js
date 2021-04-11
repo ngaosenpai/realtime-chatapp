@@ -13,6 +13,7 @@ import { KEEP_SESSION } from "./saga/authSessionSaga"
 
 import Main from './components/Main/Main.jsx'
 import Login from './components/Login/Login.jsx'
+import Register from './components/Register/Register.jsx'
 
 function App() {
 
@@ -44,7 +45,7 @@ function App() {
             <Login />
           </Route>
           <Route exact path="/register">
-            <p>Register page</p>
+            <Register />
           </Route>
           <Route path="/">
             <Main />
