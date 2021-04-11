@@ -39,7 +39,8 @@ module.exports.user_index = async (req, res) => {
         if (error) {
             res.json({
                 code: 400,
-                message: error.message,
+                message: 'Error occurs', 
+                error: error.message,
                 title: "Getting users failed" 
             })
         }        
@@ -79,7 +80,8 @@ module.exports.user_create = async (req, res) => {
     } catch (error) {
         res.json({
             code: 400,
-            message: error.message
+            message: 'Error occurs', 
+            error: error.message
         })
     }
 }
@@ -189,7 +191,8 @@ module.exports.user_update = async (req, res) => {
         if (error) {
             res.json({
                 code: 400,
-                message: error.message
+                message: 'Error occurs', 
+                error: err.message
             })
         }        
     }
@@ -218,7 +221,8 @@ module.exports.user_delete = async (req, res) => {
     } catch (error) {
         res.json({
             code: 400,
-            message: error.message
+            message: 'Error occurs', 
+            error: error.message
         })
     }
 }
@@ -229,10 +233,11 @@ module.exports.user_token = async (req, res) => {
     let accessToken = req.params.token
     if (accessToken == null) return res.sendStatus(401)
     await jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, response) => {
-        if (err) {
+        if (error) {
             return res.json({
                 code: 403,
-                message: err.message
+                message: 'Error occurs', 
+                error: error.message
             });
         }
         if (response) {
