@@ -246,7 +246,7 @@ module.exports.user_token = async (req, res) => {
             return res.json({
                 code: 200,
                 message: "Getting user with valid token successfully",
-                data: {
+                user: {
                     _id: user._id,
                     name: user.locals.name
                 }
