@@ -17,17 +17,26 @@ export function* workerFetchSession(action){
         // start fetch session (user info)
         yield put({type : FETCH_SESSION_START})
         //ajax
-        const user = yield axios.post(`localhost:4000/user/token/${token}`)
-        //save to store
-        yield put({
-            type : FETCH_SESSION_SUCCESS,
-            user : user
+        const response = yield axios.get(`http://localhost:4000/users/token/${token}`, {
+            headers: {
+              'Authorization': `Bearer ${token}` 
+            }
         })
+        yield console.log(response)
+        //save to store
+        const { user, error } = response.data
+        if(user){
+            yield put({
+                type : FETCH_SESSION_SUCCESS,
+                payload : user
+            })
+        }
+        if(error) throw new Error(error.message)
     } catch (error) {
         console.log(error.message)
         yield put({
             type : FETCH_SESSION_FAILURE,
-            error
+            payload : error
         })
     }
 
