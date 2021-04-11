@@ -75,29 +75,37 @@ module.exports.login = async (req, res) => {
             }
             else {
             await User.find({'locals.username': username})
-                .then(response => {
+                .then(async response => {
                     if (response.length > 0) {
                         const user = response[0];
-                        const accessToken = generateAccessToken(user)
-                        const refreshToken = generateRefreshToken(user)
-                        refreshTokens.push(refreshToken)
-                        res.set('Authorization', `Bearer ${accessToken}`);
-                        res.cookie('accessToken', accessToken, { 
-                            // secure: true, 
-                            httpOnly: true, 
-                            maxAge: optionAccessToken.expiresIn * 1000
-                        });
-                        res.cookie('refreshToken', refreshToken, { 
-                            // secure: true, 
-                            httpOnly: true, 
-                            maxAge: optionRefreshToken.expiresIn * 1000
-                        });
-                        res.json({
-                            code: 200,
-                            message: 'Login successfully',
-                            accessToken, 
-                            refreshToken
+                        const validPassword = await bcrypt.compare(password, user.locals.password)
+                        if (validPassword) {
+                            const accessToken = generateAccessToken(user)
+                            const refreshToken = generateRefreshToken(user)
+                            refreshTokens.push(refreshToken)
+                            res.set('Authorization', `Bearer ${accessToken}`);
+                            res.cookie('accessToken', accessToken, { 
+                                // secure: true, 
+                                httpOnly: true, 
+                                maxAge: optionAccessToken.expiresIn * 1000
+                            });
+                            res.cookie('refreshToken', refreshToken, { 
+                                // secure: true, 
+                                httpOnly: true, 
+                                maxAge: optionRefreshToken.expiresIn * 1000
+                            });
+                            return res.json({
+                                code: 200,
+                                message: 'Login successfully',
+                                accessToken, 
+                                refreshToken
+                            })
+                        }
+                        return res.json({
+                            code: 401,
+                            message: 'Login with incorrect username or password'
                         })
+                        
                     }
                     else throw new Error('Login failed');
                 })
