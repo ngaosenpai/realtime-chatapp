@@ -5,7 +5,7 @@ import { GET_JWT_LOCAL_STORAGE, GET_JWT } from '../redux/auth/authActionType'
 
 export function* workerJwt(action){
     const jwt = yield call({context: localStorage, fn: localStorage.getItem}, 'ACCESS_TOKEN')
-    // console.log(jwt)
+    console.log(jwt)
     yield put({
         type : GET_JWT_LOCAL_STORAGE,
         payload : jwt
