@@ -5,13 +5,14 @@
     flex-direction: column;
     
     &__header, &__footer{
-        background-color: #0096C7;
-        color: white;
+        background-color: #242526;
+        color: #e4e6eb;
         padding: 1em 0;
         font-weight: bold;
     }
 
     &__body{
+        background-color: #e4e6eb;
         flex-grow: 1;
         display: flex;
         justify-content: center;
@@ -27,11 +28,11 @@
     display: flex;
     flex-direction: column;
 
-    background-color: #90E0EF;
+    background-color: 	#3a3b3c;
     border-radius: 20px;
 
     &__title{
-        color: #03045E;
+        color: #e4e6eb;
         padding: 1em;
     }
 
@@ -61,11 +62,12 @@
             outline: none;
 
             &:focus{
-                border: 3px solid #0096C7
+                border: 3px solid #b0b3b8
             }
         }
 
         button{
+            
             width: fit-content;
             padding: 8px 15px;
             border-radius: 20px;
@@ -73,16 +75,16 @@
             font-weight: bold;
             
             border: 3px solid transparent;
-            background-color: #023E8A;
-            color: white;
+            background-color: #e4e6eb;
+            color: black;
 
             &:hover{
-                background-color: #0096C7;
+                background-color: #b0b3b8;
             }
             &:active{
-                border: 3px solid #023E8A;
+                border: 3px solid 	#3a3b3c;
                 background-color: white;
-                color: #023E8A;
+                color: black;
             }
         }
     }
