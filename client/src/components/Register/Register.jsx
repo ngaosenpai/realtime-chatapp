@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import './Register.scss'
 function Register(props) {
     const dispatch = useDispatch()
-    // const state = useSelector(state => state.login)
+    const state = useSelector(state => state.register)
 
     const [content, setContent] = useState({
         name: "",
@@ -50,7 +50,7 @@ function Register(props) {
                         <h2>You're new here!</h2>
                     </div>
                     <div className="register-form__alert">
-                        {/* {state.errors.map((error, i) => (<p key={i}>{error.message}</p>))} */}
+                        {state.errors.map((error, i) => (<p key={i}>{error.message}</p>))}
                     </div>
                     <div className="register-form__body">
                         <form onSubmit={handleSubmit}>
@@ -72,34 +72,32 @@ function Register(props) {
                                 onChange={e => setContent({...content, email : e.target.value})}
                             />
                             <input 
-                                    className="input--alert"
-                                    type="text" 
+                                type="text" 
                                 placeholder="Username"
                                 onChange={e => setContent({...content, username : e.target.value})}
                             />
                             <div className="register-form__body--rows">
                                 <input 
-                                    className="input--alert"
                                     type="password" 
                                     placeholder="Password"
                                     onChange={e => setContent({...content, password : e.target.value})}
                                 />
                                 <input 
-                                    className="input--alert"
                                     type="password" 
                                     placeholder="Confirm Password"
                                     onChange={e => setContent({...content, confirmPassword : e.target.value})}
                                 />
                             </div>
                             <button 
-                                // disabled={state.isLoading}
-                                // onClick={() => {
-                                //     console.log(content)
-                                //     dispatch({
-                                //         type : REGISTER,
-                                //         payload : content
-                                //     })
-                                // }} 
+                                disabled={state.isLoading}
+                                onClick={() => {
+                                    const {error, confirmPassword, ...submitContent} = content
+                                    console.log(submitContent)
+                                    dispatch({
+                                        type : REGISTER,
+                                        payload : submitContent
+                                    })
+                                }} 
                             >Register</button>
                         </form>
                     </div>
