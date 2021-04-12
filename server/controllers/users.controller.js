@@ -5,10 +5,10 @@ const jwt = require('jsonwebtoken');
 // const User = require('../models/user.model');
 const {User} = require('../models/index.model');
 
-module.exports.user_index = async (req, res) => {
+module.exports.user_index = (req, res) => {
     try {
         console.log(User)    
-        await User.find({})
+        User.find({})
             .then((listUsers) => {
                 if (listUsers.length > 0) {
                     // listUsers = listUsers.map((user) => {
@@ -47,11 +47,11 @@ module.exports.user_index = async (req, res) => {
     }
 }
 
-module.exports.user_create = async (req, res) => {
+module.exports.user_create = (req, res) => {
     try {
         let request = req.body,
-            salt = await bcrypt.genSalt(10),
-            newPassword =  await bcrypt.hash(request.password, salt),
+            salt = bcrypt.genSalt(10),
+            newPassword =  bcrypt.hash(request.password, salt),
             newProfile = {
                 locals: {
                     username: request.username,
@@ -86,9 +86,9 @@ module.exports.user_create = async (req, res) => {
     }
 }
 
-module.exports.user_profile = async (req, res) => {
+module.exports.user_profile = (req, res) => {
     try {
-        await User.findById(req.params.id)
+        User.findById(req.params.id)
             .then((user) => {
                 if (user) {
                     // user = {
@@ -124,12 +124,12 @@ module.exports.user_profile = async (req, res) => {
     }
 }
 
-module.exports.user_update = async (req, res) => {
+module.exports.user_update = (req, res) => {
     try {
         let _id = req.params.id
             changes = req.body,
-            salt = await bcrypt.genSalt(10),
-            newPassword =  await bcrypt.hash(changes.password, salt),
+            salt = bcrypt.genSalt(10),
+            newPassword =  bcrypt.hash(changes.password, salt),
             newProfile = {
                 locals: {
                     username: changes.username,
@@ -143,14 +143,14 @@ module.exports.user_update = async (req, res) => {
         
         let {locals: { username, email}} = newProfile,
             newUser = new User(newProfile)
-        await newUser.validate({'locals.username': username, 'locals.email': email}, ['locals.username', 'locals.email'])
+        newUser.validate({'locals.username': username, 'locals.email': email}, ['locals.username', 'locals.email'])
             .catch(err => {throw err});
-        await User.findById(_id)
+        User.findById(_id)
             .then(async (user) => {
                 // console.log(username)
                 
                 if (user) {
-                    await User.updateOne({_id}, newProfile)
+                    User.updateOne({_id}, newProfile)
                         .then(response => {
                             if (response) {
                                 res.json({
@@ -168,7 +168,7 @@ module.exports.user_update = async (req, res) => {
                         .catch(err => {throw err;});
                 }
                 else {
-                    await User.create(newProfile)
+                    User.create(newProfile)
                         .then(response => {
                             if(response) {
                                 res.json({
@@ -198,10 +198,10 @@ module.exports.user_update = async (req, res) => {
     }
 }
 
-module.exports.user_delete = async (req, res) => {
+module.exports.user_delete = (req, res) => {
     try {
         let _id = req.params.id
-        await User.findByIdAndRemove(_id)
+        User.findByIdAndRemove(_id)
                 .then(user => {
                     if (user) {
                         res.json({
@@ -227,12 +227,12 @@ module.exports.user_delete = async (req, res) => {
     }
 }
 
-module.exports.user_token = async (req, res) => {
+module.exports.user_token = (req, res) => {
     // const authorizationHeader = req.headers.authorization
     // const accessToken = authorizationHeader && authorizationHeader.split(' ')[1]
     let accessToken = req.params.token
     if (accessToken == null) return res.sendStatus(401)
-    await jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (error, response) => {
+    jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (error, response) => {
         if (error) {
             return res.json({
                 code: 403,
@@ -257,4 +257,8 @@ module.exports.user_token = async (req, res) => {
             message: "Getting user failed with invalid token"
         })
     })
+}
+
+module.exports.user_list = (req, res) => {
+
 }
