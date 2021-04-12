@@ -67,3 +67,26 @@ module.exports.message_create = (req, res) => {
     }
 
 }
+
+//Hao add
+module.exports.getPrivate = (req, res) => {
+    const {
+        senderId,
+        receiverId,
+        skip,
+        limit
+    } = req.body
+
+    Message.find({
+        $or : [
+            {$and : [ {senderId}, {receiverId} ]},
+            {$and : [ {senderId : receiverId, receiverId : senderId} ]}
+        ]
+    })
+    .sort({ sentTime : 1 })
+    .skip(skip)
+    .limit(limit)
+    .then(messages => res.json({messages}))
+    .catch(error => res.json({error}))
+
+}

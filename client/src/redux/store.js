@@ -9,6 +9,7 @@ import { authReducer } from './auth/authReducer'
 import { sessionReducer } from './session/sessionReducer'
 import { loginReducer } from "./login/loginReducer"
 import { registerReducer } from "./register/registerReducer"
+import { messagesReducer } from "./messages/messagesReducer"
 
 import rootSaga from '../saga/rootSaga'
 
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     jwt: authReducer,
     session : sessionReducer,
     login : loginReducer,
-    register : registerReducer
+    register : registerReducer,
+    currentMessages : messagesReducer
 })
 
 const store = createStore(
