@@ -1,5 +1,7 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects'
 import axios from 'axios'
+import { io } from "socket.io-client";
+
 import {
     FETCH_SESSION,
     FETCH_SESSION_START,
@@ -24,11 +26,27 @@ export function* workerFetchSession(action){
         })
         yield console.log(response)
         //save to store
-        const { user, error } = response.data
+        let { user, error } = response.data
         if(user){
+            const handshake = {
+                auth : {
+                    userId : user._id,
+                    // add token later
+                }
+            }
+            const socket = yield io("http://localhost:4000", handshake)
+            console.log(socket)
+            user = { ...user, socket : socket }
+            //
+
             yield put({
                 type : FETCH_SESSION_SUCCESS,
                 payload : user
+            })
+
+            // socket handle here
+            socket.on("test", (data) => {
+                console.log("server send: ", data)
             })
         }
         if(error) throw new Error(error.message)
