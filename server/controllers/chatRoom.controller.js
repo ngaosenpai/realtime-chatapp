@@ -1,8 +1,4 @@
 const users = [];
-console.log(`listing active users`)
-console.log(users)
-// trials
-
 module.exports.userJoin = (id, username, roomId) => {
     const user = {id, username, roomId}
     users.push(user);
