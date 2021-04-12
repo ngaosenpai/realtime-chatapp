@@ -232,7 +232,7 @@ module.exports.user_token = async (req, res) => {
     // const accessToken = authorizationHeader && authorizationHeader.split(' ')[1]
     let accessToken = req.params.token
     if (accessToken == null) return res.sendStatus(401)
-    await jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, response) => {
+    await jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (error, response) => {
         if (error) {
             return res.json({
                 code: 403,
@@ -246,7 +246,7 @@ module.exports.user_token = async (req, res) => {
             return res.json({
                 code: 200,
                 message: "Getting user with valid token successfully",
-                data: {
+                user: {
                     _id: user._id,
                     name: user.locals.name
                 }

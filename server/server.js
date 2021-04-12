@@ -11,12 +11,20 @@ const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const socketio = require('socket.io')
 const http = require('http')
+const cors = require("cors")
 
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server);
+
+//Hao add
+const User = require("./models/user.model")
+const Message = require("./models/message.model")
 
 app.use('/public', express.static('public'));
+app.use(cors({
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}))
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session({
@@ -39,6 +47,36 @@ db.once('open', function cb() {
   console.log("Now connected to MongoDB!")
 });
 
+
+
+const { userJoin, getCurrentUser, userLeave, getActiveUsers} = require('./controllers/chatRoom.controller')
+
+const homeRoute = require('./routes/home.route')
+const authsRoute = require('./routes/auths.route')
+
+const {authenticateToken, formatMessage} = require('./middlewares/index.middleware')
+
+app.use('/auths', authsRoute)
+app.use('/', authenticateToken, homeRoute)
+
+const PORT = process.env.PORT || 3000;
+
+server.listen( PORT, () => {
+    console.log(`server listening on port ${PORT}: http://localhost:${PORT}`);
+})
+
+
+
+//Hao modify
+//socket server implementation
+
+const io = socketio(server, {
+    cors: {
+      origin: 'http://localhost:3000',
+    }
+});
+
+
 io.use((socket, next) => {
     // client should add userId into socket.auth 
     const userId = socket.handshake.auth.userId;
@@ -50,6 +88,45 @@ io.use((socket, next) => {
 })
 
 io.on('connection', socket => {
+
+    // Hao add
+    console.log("have new connection: ", socket.id)
+    //update socketId in user model 
+    const { userId } = socket.handshake.auth
+    User.findByIdAndUpdate(userId, {socketId : socket.id}, { new : true })
+    .exec()
+    .then(user => console.log(user))
+    
+    setTimeout(() => {
+        socket.emit("test", "send after 5s")
+    }, 5000)
+
+    socket.on("client-send-message", ({senderId, receiverId, content}) => {
+
+        const message = new Message({senderId, receiverId, content})
+        message.save()
+        .then(mess => {
+            console.log("Save OK ",mess)
+            return User.findById(receiverId)
+        })
+        .exec()
+        .then(receiver => {
+            if(receiver.socketId){
+                io.to(receiver.socketId)
+                .emit("server-send-message", {
+                    ...message
+                })
+            }
+            socket.emit("server-send-message", {
+                ...message
+            })
+        }) 
+        .catch(err => console.log("Some thing wrong: ", err.message))
+
+    })
+    // 
+
+
     socket.on('joinRoom', ({name, roomId}) => {
         // Room would be roomId
         const user = userJoin(socket.id, name, roomId);
@@ -86,20 +163,4 @@ io.on('connection', socket => {
                 })
         }
     })
-})
-
-const { userJoin, getCurrentUser, userLeave, getActiveUsers} = require('./controllers/chatRoom.controller')
-
-const homeRoute = require('./routes/home.route')
-const authsRoute = require('./routes/auths.route')
-
-const {authenticateToken, formatMessage} = require('./middlewares/index.middleware')
-
-app.use('/auths', authsRoute)
-app.use('/', authenticateToken, homeRoute)
-
-const PORT = process.env.PORT || 3000;
-
-server.listen( PORT, () => {
-    console.log(`server listening on port ${PORT}: http://localhost:${PORT}`);
 })

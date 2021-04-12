@@ -1,22 +1,24 @@
 const {Schema, model} = require('mongoose')
 
 const MessageSchema = new Schema({
-    connectKey: String, 
-    // messages: [{
-    //     sender: String,
-    //     content: String,
-    //     timeStamp: {
-    //         type: Date,
-    //         default: new Date()
-    //     }
-    // }],
-    senderId: String,
-    recipientId: String,
-    message: {
-        type: String,
-        content: {}
+    //Hao modify
+
+    senderId: {
+        type : Schema.Types.ObjectId,
+        ref : 'User'
     },
-    timeStamp: new Date(),
+    receiverId : {
+        type : Schema.Types.ObjectId,
+        ref : 'User'
+    },
+    content: {
+        type: String,
+        default : null
+    },
+    sendTime : {
+        type: Date,
+        default : Date.now
+    }
 })
 
 const Message = model("Message", MessageSchema, "messages");

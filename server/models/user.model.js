@@ -63,6 +63,13 @@ const UserSchema = new mongoose.Schema({
 		image: String,
 		phone: String,
 	},
+
+	//Hao add
+	socketId : {
+		type : String,
+		default : null
+	},
+
     updated: { 
 		type: Date, 
 		default: null

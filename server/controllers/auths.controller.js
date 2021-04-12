@@ -103,17 +103,17 @@ module.exports.login = async (req, res) => {
                         }
                         return res.json({
                             code: 401,
-                            message: 'Login with incorrect username or password'
+                            error: 'Login with incorrect password'
                         })
                         
                     }
-                    else throw new Error('Login failed');
+                    else throw new Error('Username is not exist');
                 })
             }
         }
     } 
     catch (error) {
-        res.status(400).json({
+        res.json({
             code: 400,
             message: 'Error occurs',
             error: error.message
