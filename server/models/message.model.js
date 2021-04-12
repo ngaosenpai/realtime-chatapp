@@ -15,7 +15,7 @@ const MessageSchema = new Schema({
         type: String,
         default : null
     },
-    sendTime : {
+    sentTime : {
         type: Date,
         default : Date.now
     }
