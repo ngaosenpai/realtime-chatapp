@@ -5,7 +5,7 @@ import { watchFetchSession } from './sessionSaga'
 import { watchKeepSession } from "./authSessionSaga"
 import { watchLogin } from "./loginSaga"
 import { watchRegister } from "./registerSaga"
-import { watchFetchMessages } from "./messagesSaga"
+import { watchProcessMessages } from "./messagesSaga"
 
 export default function* rootSaga(){
     yield all([
@@ -14,6 +14,6 @@ export default function* rootSaga(){
         watchKeepSession(),
         watchLogin(),
         watchRegister(),
-        watchFetchMessages()
+        watchProcessMessages()
     ])
 }

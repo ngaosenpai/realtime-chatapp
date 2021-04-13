@@ -1,0 +1,23 @@
+.message{
+    background-color: lightgray;
+    color: black;
+    padding: 0.5em 1em;
+    margin-bottom: 5px;
+    text-align: left;
+    border-radius: 10px;
+    cursor: pointer;
+
+    &__time{
+        visibility: hidden;
+        font-size: 0.75em;
+        // line-height: 0.75em;
+        font-weight: lighter;
+        color: gray;
+    }
+
+    &:hover{
+        .message__time{
+            visibility: visible;
+        }
+    }
+}

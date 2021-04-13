@@ -1,33 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux"
-import { FETCH_MESSAGES } from "../../redux/messages/messagesActionType"
+import { FETCH_MESSAGES, SEND_MESSAGE } from "../../redux/messages/messagesActionType"
+
 
 import { UnorderedListOutlined } from '@ant-design/icons'
+import Message from "../Message/Message.jsx"
 import './ChatMain.scss'
 function ChatMain(props) {
-    // const chats = [
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-    //     {content:"asasasas asdas shja asdas asd asd asdas d"},
-        
-    // ]
+
 
     //test
     const devId = '606836ab9158801258ac3498'
@@ -38,10 +19,24 @@ function ChatMain(props) {
     const currentMessages = useSelector(state => state.currentMessages)
     const session = useSelector(state => state.session)
     const dispatch = useDispatch()
-
+    const [content, setContent] = useState("")
     // const {path} = useRouteMatch
     console.log(userId)
     
+    const refBtn = useRef(null)
+    const refScroll = useRef(null)
+
+
+    useEffect(() => {
+        console.log("last log after send mess")
+        const scrollDown = e => {
+            const { scrollHeight } = refScroll.current
+            refScroll.current.scrollTo(0, scrollHeight)
+        } 
+        scrollDown()
+        setContent("")
+    }, [currentMessages.messages])
+
     useEffect(() => {
         dispatch({
             type : FETCH_MESSAGES,
@@ -55,7 +50,24 @@ function ChatMain(props) {
                 skip : currentMessages.skip
             }
         })
+
+        //
+        const listener = event => {
+            if (event.code === "Enter" || event.code === "NumpadEnter") {
+                refBtn.current.click()
+            }
+        };
+
+        document.addEventListener("keydown", listener);
+        
+
+        return () => {
+            document.removeEventListener("keydown", listener);
+            
+        };
     }, [userId])
+
+    
 
     return (
         <div className="chat-main">
@@ -73,14 +85,41 @@ function ChatMain(props) {
                 
                 />}
             </div>
-            <div className="chat-main__content" style={{height: 'calc(100vh - 122px)'}}>
-                {currentMessages.messages.map((message) => <p key={message._id} style={{
-                    alignSelf : message.senderId === adminId ? 'flex-start' : 'flex-end'
-                }}>{message.content}</p>)}
+            <div 
+                className="chat-main__content" 
+                style={{height: 'calc(100vh - 122px)'}}
+                ref={refScroll}
+            >
+                {currentMessages.messages.map((message) => <Message 
+                        key={message._id} 
+                        style={{
+                            alignSelf : message.senderId === adminId ? 'flex-end' : 'flex-start'
+                        }}
+                        content = {message.content}
+                        time = {new Date(Date.parse(message.sentTime))}
+                    />
+                )}
+                
             </div>
             <div className="chat-main__feature">
-                <input type="text" placeholder="Type the messages here..."/>
-                <button>Send</button>
+                <input 
+                    type="text" 
+                    placeholder="Type the messages here..."
+                    value={content}
+                    onChange={e => setContent(e.target.value)}
+                />
+                <button
+                    ref={refBtn}
+                    onClick={() => {
+                        dispatch({
+                            type : SEND_MESSAGE,
+                            payload : {
+                                receiverId : devId,
+                                content
+                            }
+                        })
+                    }}
+                >Send</button>
             </div>
         </div>
     );

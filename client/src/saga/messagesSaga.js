@@ -1,11 +1,14 @@
-import { put, takeEvery, select } from 'redux-saga/effects'
+import { put, takeEvery, select, takeLatest } from 'redux-saga/effects'
 import { 
     FETCH_MESSAGES,
     FETCH_MESSAGES_START,
     FETCH_MESSAGES_SUCCESS,
-    FETCH_MESSAGES_FAILURE
+    FETCH_MESSAGES_FAILURE,
+    SEND_MESSAGE
 } from "../redux/messages/messagesActionType"
 import axios from "axios"
+
+
 
 function* workerFetchMessages(action){
     /** dispatch this
@@ -16,30 +19,38 @@ function* workerFetchMessages(action){
             }
      */
     try{
-        console.log("1a")
+       
         console.log(action.payload)
         yield put({ 
             type : FETCH_MESSAGES_START,
             payload : {...action.payload}
         })
-        console.log("1b")
+        
         const token = yield select(state => state.jwt.token)
         const header = {
             headers: {
                 'Authorization': `Bearer ${token}` 
             }
         }
-        console.log("1c")
+        
         const response = yield axios.post("http://localhost:4000/messages/get", action.payload, header)
-        console.log(response.data.messages)
-        yield put({
-            type : FETCH_MESSAGES_SUCCESS,
-            payload : {
-                ...action.payload,
-                newMessages : response.data.messages
-            }
-        })
-        console.log("1d")
+
+        const { messages, error } = response.data
+
+        console.log("fetch ook: ", messages)
+
+        if(messages){
+
+            yield put({
+                type : FETCH_MESSAGES_SUCCESS,
+                payload : {
+                    ...action.payload,
+                    newMessages : response.data.messages
+                }
+            })
+        }
+        if(error) throw new Error(error)
+        
     } catch(error) {
         put({
             type : FETCH_MESSAGES_FAILURE,
@@ -52,6 +63,21 @@ function* workerFetchMessages(action){
 
 }
 
-export function* watchFetchMessages(){
+// function* workerSendNewMessage(action){
+//     const user = yield select(state => state.session.user)
+//     const { receiverId, content } = action.payload
+//     console.log("you send message - wait for server response!")
+//     console.log(user)
+//     user.socket.emit("client-send-message", {
+//         // senderId : user._id,  
+            // senderId : action.payload.senderId, //test
+            // receiverId,
+            // content
+//     })
+
+// }
+
+export function* watchProcessMessages(){
     yield takeEvery(FETCH_MESSAGES, workerFetchMessages)
+    // yield takeLatest(SEND_MESSAGE, workerSendNewMessage)
 }

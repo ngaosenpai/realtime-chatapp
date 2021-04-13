@@ -1,7 +1,9 @@
 import {
     FETCH_MESSAGES_START,
     FETCH_MESSAGES_SUCCESS,
-    FETCH_MESSAGES_FAILURE
+    FETCH_MESSAGES_FAILURE,
+    ADD_ONE_NEW_MESSAGE_SUCCESS,
+    ADD_ONE_NEW_MESSAGE_FAILURE
 } from "./messagesActionType"
 
 const initialState = {
@@ -11,7 +13,7 @@ const initialState = {
     messages : [],
     error : null,
     skip : 0,
-    limit : 50
+    limit : 100
 }
 
 export const messagesReducer = (state = initialState, action) => {
@@ -45,9 +47,25 @@ export const messagesReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading : false,
-                messages : [...action.payload.newMessages],
                 error : action.payload.error
             }
+        
+        case ADD_ONE_NEW_MESSAGE_SUCCESS:
+            console.log("called")
+            return {
+                ...state,
+                messages : [...state.messages, ...action.payload.newMessages],
+                skip : state.skip + 1,
+                error : null
+            }
+        
+        case ADD_ONE_NEW_MESSAGE_FAILURE:
+            console.log("called")
+            return {
+                ...state,
+                error : action.payload.error
+            }
+        
         
         default : return state
 
