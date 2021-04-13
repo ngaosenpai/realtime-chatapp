@@ -13,16 +13,6 @@ module.exports.user_index = (req, res) => {
         User.find({})
             .then((listUsers) => {
                 if (listUsers.length > 0) {
-                    // listUsers = listUsers.map((user) => {
-                    //     return {
-                    //         _id: user._id,
-                    //         username: user.locals.username,
-                    //         name: user.locals.name,
-                    //         status: 'user.status',
-                    //         image: 'url/path-to-image',
-                    //         isFriend: true
-                    //     }
-                    // })
                     res.json({
                         code: 200,
                         message: "Getting users successfully",
@@ -93,14 +83,6 @@ module.exports.user_profile = (req, res) => {
         User.findById(req.params.id)
             .then((user) => {
                 if (user) {
-                    // user = {
-                    //     _id: user._id,
-                    //     name: user.locals.name,
-                    //     status: 'user.status',
-                    //     image: 'url/path-to-image',
-                    //     listFriend: [],
-                    //     groups: [],
-                    // }
                     res.json({
                         code: 200,
                         message: "Getting profile successfully",
@@ -149,8 +131,6 @@ module.exports.user_update = (req, res) => {
             .catch(err => {throw err});
         User.findById(_id)
             .then(async (user) => {
-                // console.log(username)
-                
                 if (user) {
                     User.updateOne({_id}, newProfile)
                         .then(response => {
@@ -230,8 +210,6 @@ module.exports.user_delete = (req, res) => {
 }
 
 module.exports.user_token = (req, res) => {
-    // const authorizationHeader = req.headers.authorization
-    // const accessToken = authorizationHeader && authorizationHeader.split(' ')[1]
     let accessToken = req.params.token
     if (accessToken == null) return res.sendStatus(401)
     jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (error, response) => {
@@ -270,11 +248,10 @@ module.exports.user_conversation = (req, res) => {
         // senderId = adminId
 
         Message.find({
-            "$or":[
-                {senderId: userId},
-                {receiverId: userId},
+            $or:[
+                {senderId: userId, receiverId: {$ne: userId}},
+                {senderId: {$ne: userId}, receiverId: userId},
             ]})
-            .sort({sentTime: -1})
             .skip(skip)
             .limit(limit)
             .distinct('senderId') // check distinct sender before receiver to get self conversation
@@ -282,26 +259,34 @@ module.exports.user_conversation = (req, res) => {
             .then((response) => {
                 console.log(response)
                 if (response.length > 0) {
-                    return res.json({
-                        code: 200,
-                        message: "Successfully",
-                        data: response
-                    })
-                    // return User.find({_id: {$in: response}})
+                    // return res.json({
+                    //     code: 200,
+                    //     message: "Successfully",
+                    //     data: response
+                    // })
+                    // return Message.find({
+                    //             senderId: userId, 
+                    //             receiverId: {$in: response, $ne: userId},
+                    // })
+                    
+                    return User.find({_id: {$in: response}})
                 }
                 throw new Error("Can't find any user in conversation with");
             })
             // .then(response => {
-            //     console.log(response)
-            //     if (response.length > 0) {
-            //         return res.json({
-            //             code: 200,
-            //             message: "Getting conversation successfully",
-            //             data: response
-            //         })
-            //     }
-            //     throw new Error("None user ever chat with")
+            //     res.json({resposnse})
             // })
+            .then(response => {
+                console.log(response)
+                if (response.length > 0) {
+                    return res.json({
+                        code: 200,
+                        message: "Getting conversation successfully",
+                        data: response
+                    })
+                }
+                throw new Error("None user ever chat with")
+            })
             .catch((error) => {throw error})
 
         
