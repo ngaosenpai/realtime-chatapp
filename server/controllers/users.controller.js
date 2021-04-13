@@ -6,7 +6,7 @@ const {Message, User} = require('../models/index.model')
 const devId = '606836ab9158801258ac3498'
 const adminId = '60688ba34507a14e9caf541a'
 const testerID = '60688ae72b376c4da8dd0cce'
-
+// 606e81428f9ef04454f8efaa
 module.exports.user_index = (req, res) => {
     try {
         console.log(User)    
@@ -264,55 +264,44 @@ module.exports.user_token = (req, res) => {
 module.exports.user_conversation = (req, res) => {
     try {
         let { senderId } = req.body,
+            userId = senderId
             limit= 50,
             skip = 0
-        senderId = adminId
+        // senderId = adminId
 
         Message.find({
             "$or":[
-                {senderId},
-                {receiverId:senderId},
+                {senderId: userId},
+                {receiverId: userId},
             ]})
-            .sort({sentTime: 1})
+            .sort({sentTime: -1})
             .skip(skip)
             .limit(limit)
-            .distinct('senderId')
-            // .aggreate({
-            //     $group: {_id: {senderId:"$senderId" , receiverId:"$receiverId"}}
-            // },(error, results) => {console.log(results)})
+            .distinct('senderId') // check distinct sender before receiver to get self conversation
+            .distinct('receiverId')
             .then((response) => {
-                console.log(response)
-                if (response.length > 0) {
-                    console.log(response)
-                    // let listUsersId = response.map((message) => {
-                    //     let to = senderId == message.senderId ? message.receiverId: message.senderId
-                    //     return {_id: to}
-                    // })
-                    // console.log('listUsersId')
-                    // console.log(listUsersId)
-                    // return res.json({
-                    //     code: 200,
-                    //     message: "Successfully",
-                    //     data: response
-                    // })
-                    return User.find({_id: {$in: response}})
-                }
-                else {
-                    throw new Error("Can't find any user in conversation with");
-                }
-            })
-            .catch((error) => {throw error})
-            .then(response => {
                 console.log(response)
                 if (response.length > 0) {
                     return res.json({
                         code: 200,
-                        message: "Getting conversation successfully",
+                        message: "Successfully",
                         data: response
                     })
+                    // return User.find({_id: {$in: response}})
                 }
-                throw new Error("None user ever chat with")
+                throw new Error("Can't find any user in conversation with");
             })
+            // .then(response => {
+            //     console.log(response)
+            //     if (response.length > 0) {
+            //         return res.json({
+            //             code: 200,
+            //             message: "Getting conversation successfully",
+            //             data: response
+            //         })
+            //     }
+            //     throw new Error("None user ever chat with")
+            // })
             .catch((error) => {throw error})
 
         
