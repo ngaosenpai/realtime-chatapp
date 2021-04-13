@@ -103,27 +103,33 @@ io.on('connection', socket => {
         socket.emit("test", "send after 5s")
     }, 5000)
 
-    socket.on("client-send-message", ({senderId, receiverId, content}) => {
+    socket.on("client-send-message", async ({senderId, receiverId, content}) => {
 
-        const message = new Message({senderId, receiverId, content})
-        message.save()
-        .then(mess => {
+        try {
+            console.log(senderId, receiverId, content)
+            const message = new Message({senderId, receiverId, content})
+            const mess = await message.save()
+            
             console.log("Save OK ",mess)
-            return User.findById(receiverId)
-        })
-        .exec()
-        .then(receiver => {
+            const receiver = await User.findById(receiverId).exec()
+        
+            
             if(receiver.socketId){
                 io.to(receiver.socketId)
                 .emit("server-send-message", {
-                    ...message
+                    message : mess
                 })
             }
             socket.emit("server-send-message", {
-                ...message
+                message : mess
             })
-        }) 
-        .catch(err => console.log("Some thing wrong: ", err.message))
+
+        } catch (error) {
+            console.log("Some thing wrong: ", error.message)
+            socket.emit("server-send-message", {
+                error
+            })
+        }
 
     })
     // 

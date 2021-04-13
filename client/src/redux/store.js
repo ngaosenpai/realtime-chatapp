@@ -12,7 +12,7 @@ import { registerReducer } from "./register/registerReducer"
 import { messagesReducer } from "./messages/messagesReducer"
 
 import rootSaga from '../saga/rootSaga'
-
+import { socketMiddleware } from "../socketClient"
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -26,7 +26,7 @@ const rootReducer = combineReducers({
 
 const store = createStore(
     rootReducer,
-    applyMiddleware(sagaMiddleware)
+    applyMiddleware(socketMiddleware, sagaMiddleware)
 )
 
 sagaMiddleware.run(rootSaga)
