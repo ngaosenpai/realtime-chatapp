@@ -7,6 +7,7 @@ router.route('/')
     .post(controller.message_create)
 
 //Hao add
-router.route("/get").post(controller.getPrivate)
+router.route("/get")
+    .post(controller.getPrivate)
 
 module.exports = router

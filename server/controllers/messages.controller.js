@@ -1,30 +1,34 @@
 const {Message, User} = require('../models/index.model')
 const devId = '606836ab9158801258ac3498'
 const adminId = '60688ba34507a14e9caf541a'
-const testerID = '60688ae72b376c4da8dd0cce'
+const testerId = '60688ae72b376c4da8dd0cce'
+const longId = '606e81428f9ef04454f8efaa'
 
 module.exports.index = (req, res) => {
     try {
-        let { sederId, receiverId, offset, skip, limit } = req.body
+        let { senderId, receiverId, offset, skip, limit } = req.body
         // testing api
         skip = 0
         limit = 50, // skip + limit
-        senderId = adminId,
-        receiverId = devId
+        senderId = '606e81428f9ef04454f8efaa',
+        receiverId = '60688ba34507a14e9caf541a'
         Message.find({
             "$or":[
                 {senderId},
                 {receiverId:senderId},
             ]})
-            .sort({sentTime: 1})
+            .sort({sentTime: -1})
             .skip(skip)
             .limit(limit)
             .then((response) => {
                 if (response.length > 0) {
                     response = response.map((message) => {
+                        console.log(message)
+                        let from = receiverId == message.receiverId ? message.senderId : message.receiverId
                         let to = senderId == message.senderId ? message.receiverId: message.senderId
                         return {
-                            to: to,
+                            from,
+                            to,
                             content: message.content, 
                             sentTime: message.sentTime
                         }
