@@ -9,6 +9,7 @@
         color: white;
         padding: 1em 0;
         font-weight: bold;
+        background-color: #242526;
     }
 
     &__body{
@@ -16,6 +17,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        background-color: #e4e6eb;
     }
 
 }
@@ -27,11 +29,11 @@
     display: flex;
     flex-direction: column;
 
-    background-color: #90E0EF;
+    background-color: #242526;
     border-radius: 20px;
 
     &__title{
-        color: #03045E;
+        color: #e4e6eb;
         padding: 1em;
     }
 
@@ -70,7 +72,7 @@
             }
             
             &:focus{
-                border: 3px solid #0096C7;
+                border: 3px solid #b0b3b8;
             }
         }
 
@@ -82,16 +84,16 @@
             font-weight: bold;
             
             border: 3px solid transparent;
-            background-color: #023E8A;
-            color: white;
+            background-color: #e4e6eb;
+            color: #242526;
 
             &:hover{
-                background-color: #0096C7;
+                background-color: #b0b3b8;
             }
             &:active{
-                border: 3px solid #023E8A;
-                background-color: white;
-                color: #023E8A;
+                border: 3px solid #b0b3b8;
+                background-color: #e4e6eb;
+                color: #242526;
             }
         }
 
