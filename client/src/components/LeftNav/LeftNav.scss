@@ -1,7 +1,7 @@
 .left-nav{
     // min-width: 300px;
     // max-width: 500px;
-    background-color: white;
+    background-color: #242526;
     height: 100%;
     // position: fixed;
     display: flex;
@@ -10,4 +10,7 @@
     @media screen and (max-width:768px) {
         display: none;
     }
+}
+p{
+    color: white;
 }
