@@ -5,7 +5,7 @@ import {
     REGISTER_SUCCESS,
     REGISTER_FAILURE
 } from '../redux/register/registerActionType'
-import { KEEP_SESSION } from './authSessionSaga'
+import { LOGIN, LOGIN_SUCCESS } from '../redux/login/loginActionType'
 import axios from 'axios'
 
 export function* workerRegister(action) {
@@ -22,16 +22,10 @@ export function* workerRegister(action) {
         })
         yield console.log(response);
 
-        // store token to localStorage
-        yield call({
-            context: localStorage, 
-            fn: localStorage.setItem
-        }, 'ACCESS_TOKEN', response.data.accessToken)
-
-        // dispatch to get jwt from localStorage and user info
-        yield put({type: KEEP_SESSION})
-        
         yield put({type: REGISTER_SUCCESS})
+        yield put({type: LOGIN, payload: {username, password}})
+        yield put({type: LOGIN_SUCCESS})
+
     } catch (error) {
         console.log(error)
         yield put({type: REGISTER_FAILURE, payload: error})

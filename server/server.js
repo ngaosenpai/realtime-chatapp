@@ -58,8 +58,8 @@ const authsRoute = require('./routes/auths.route')
 const {authenticateToken, formatMessage} = require('./middlewares/index.middleware')
 
 app.use('/auths', authsRoute)
-// app.use('/', authenticateToken, homeRoute)
-app.use('/', homeRoute)
+app.use('/', authenticateToken, homeRoute)
+// app.use('/', homeRoute)
 
 const PORT = process.env.PORT || 3000;
 
