@@ -27,11 +27,17 @@ export const messagesReducer = (state = initialState, action) => {
     switch(action.type){
 
         case FETCH_MESSAGES_START:
+
+            const list = state.receiverId === action.payload.receiverId ? [...state.messages] : []
+            const sk = state.receiverId === action.payload.receiverId ? state.skip : 0
+            
             return {
                 ...state,
                 isLoading : true,
                 error : null,
-                receiverId : action.payload.receiverId
+                receiverId : action.payload.receiverId,
+                messages : list,
+                skip : sk
             }
         
         case FETCH_MESSAGES_SUCCESS:

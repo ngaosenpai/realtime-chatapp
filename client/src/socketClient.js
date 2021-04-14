@@ -3,6 +3,11 @@ import {
     ADD_ONE_NEW_MESSAGE_FAILURE,
     SEND_MESSAGE
 } from "./redux/messages/messagesActionType"
+
+import {
+    PUSH_CONVERSATION
+} from "./redux/conversation/conversationActionType"
+
 import { io } from 'socket.io-client';
 export const INIT_SOCKET = "INIT_SOCKET"
 
@@ -41,6 +46,14 @@ export const socketMiddleware = storeAPI => next => action => {
                         newMessages : [message]
                     }
                 })
+
+                storeAPI.dispatch({
+                    type : PUSH_CONVERSATION,
+                    payload : {
+                        newMessage : message
+                    }
+                })
+
             }
             if(error){
                 storeAPI.dispatch({

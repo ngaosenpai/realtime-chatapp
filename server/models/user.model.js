@@ -69,6 +69,10 @@ const UserSchema = new mongoose.Schema({
 		type : String,
 		default : null
 	},
+	contact : [{    //click "chat with tempUser" will send req to api and add `tempUser` to this
+		type : mongoose.Schema.Types.ObjectId,
+		ref : "User"
+	}],
 
     updated: { 
 		type: Date, 
