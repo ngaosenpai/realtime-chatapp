@@ -11,17 +11,21 @@ function ChatMain(props) {
 
 
     //test
-    const devId = '606836ab9158801258ac3498'
-    const adminId = '60688ba34507a14e9caf541a'
-
+    // const devId = '606836ab9158801258ac3498'
+    // const adminId = '60688ba34507a14e9caf541a'
     const { shouldShowMenu, setShouldShowMenu } = props
     const {userId} = useParams()
+
     const currentMessages = useSelector(state => state.currentMessages)
     const session = useSelector(state => state.session)
+    const list = useSelector(state => state.conversation.list)
+    const targetUser = list.filter(item => item.contactedId === userId)
+
     const dispatch = useDispatch()
+
     const [content, setContent] = useState("")
     // const {path} = useRouteMatch
-    console.log(userId)
+    console.log("url: ", userId)
     
     const refBtn = useRef(null)
     const refScroll = useRef(null)
@@ -41,13 +45,9 @@ function ChatMain(props) {
         dispatch({
             type : FETCH_MESSAGES,
             payload : {
-                // senderId : session.user._id, 
-                // receiverId : userId,
-
-                //test
-                senderId : adminId,
-                receiverId : devId,
-                skip : currentMessages.skip
+                senderId : session.user._id, 
+                receiverId : userId,
+                // skip : currentMessages.skip
             }
         })
 
@@ -76,7 +76,7 @@ function ChatMain(props) {
                     <img src="https://picsum.photos/200" alt=""/>
                 </div>
                 <div className="chat-main__header__name">
-                    <p>A user {currentMessages.receiverId} </p>
+                    <p>{targetUser[0].name} </p>
                 </div>
                 { !shouldShowMenu && <UnorderedListOutlined 
                     style={{zIndex:99}}
@@ -93,7 +93,7 @@ function ChatMain(props) {
                 {currentMessages.messages.map((message) => <Message 
                         key={message._id} 
                         style={{
-                            alignSelf : message.senderId === adminId ? 'flex-end' : 'flex-start'
+                            alignSelf : message.senderId === session.user._id ? 'flex-end' : 'flex-start'
                         }}
                         content = {message.content}
                         time = {new Date(Date.parse(message.sentTime))}
@@ -114,7 +114,7 @@ function ChatMain(props) {
                         dispatch({
                             type : SEND_MESSAGE,
                             payload : {
-                                receiverId : devId,
+                                receiverId : userId,
                                 content
                             }
                         })

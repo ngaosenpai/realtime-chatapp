@@ -26,13 +26,18 @@ function* workerFetchMessages(action){
             payload : {...action.payload}
         })
         
+        const cM = yield select(state => state.currentMessages)
+        console.log("after start: ", cM )
+
         const token = yield select(state => state.jwt.token)
         const header = {
             headers: {
                 'Authorization': `Bearer ${token}` 
             }
         }
-        
+
+        console.log(action)
+
         const response = yield axios.post("http://localhost:4000/messages/get", action.payload, header)
 
         const { messages, error } = response.data
