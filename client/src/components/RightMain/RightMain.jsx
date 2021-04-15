@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Switch,
     Route,
-    useRouteMatch
+    useRouteMatch,
+    useLocation
   } from "react-router-dom";
 
 import ChatMain from '../ChatMain/ChatMain';
@@ -11,10 +12,8 @@ import SearchResult from '../SearchResult/SearchResult'
 import Profile from '../Profile/Profile'
 import './RightMain.scss'
 function RightMain(props) {
-    const { path, url } = useRouteMatch();
 
     const [shouldShowMenu, setShouldShowMenu] = useState(false)
-    
     
     return (
         <div className="right-main">
@@ -24,22 +23,17 @@ function RightMain(props) {
             </div>
             {/* this wil contain routes: chat, search result, info user*/}
             <Switch>
-
-
-                <Route  path={`${path}chat/:userId`}>
+                <Route  path={`/chat/:userId`}>
                     { <ChatMain shouldShowMenu={shouldShowMenu} setShouldShowMenu={setShouldShowMenu}/>}
                 </Route>
                 
-                <Route exact path={`${path}user`}>
+                <Route exact path={`/user`}>
                     <Profile/>
                 </Route>
-                <Route exact path={`${path}search`}>
-                    <SearchResult 
-                        // showSearchResult={showSearchResult} 
-                        // setShowSearchResult={setShowSearchResult}
-                    />
+                <Route path={`/search/:search`}>
+                    <SearchResult/>
                 </Route>
-                <Route exact path={`${path}`}>
+                <Route exact path={`/`}>
                     <p>Wellcome</p>
                 </Route>
             </Switch>

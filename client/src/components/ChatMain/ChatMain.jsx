@@ -58,12 +58,12 @@ function ChatMain(props) {
             }
         };
 
-        document.addEventListener("keydown", listener);
+        document.addEventListener("keyup", listener);
         
         console.log(targetUser)
 
         return () => {
-            document.removeEventListener("keydown", listener);
+            document.removeEventListener("keyup", listener);
             
         };
     }, [userId])
@@ -114,13 +114,15 @@ function ChatMain(props) {
                 <button
                     ref={refBtn}
                     onClick={() => {
-                        dispatch({
-                            type : SEND_MESSAGE,
-                            payload : {
-                                receiverId : userId,
-                                content
-                            }
-                        })
+                        if (content) {
+                            dispatch({
+                                type : SEND_MESSAGE,
+                                payload : {
+                                    receiverId : userId,
+                                    content
+                                }
+                            })
+                        }
                     }}
                 >Send</button>
             </div>

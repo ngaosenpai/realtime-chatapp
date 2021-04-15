@@ -1,36 +1,39 @@
-import React, { useState }from 'react';
+import React, { useState, useEffect }from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-
+import {useRouteMatch, Link, useLocation } from 'react-router-dom'
 import SearchResult from '../SearchResult/SearchResult'
 import './SearchConversation.scss'
 
 function SearchConversation (props) {
-    let searchResults = useSelector(state => state.searchResults)
-    console.log(`searchResults`)
-    console.log(searchResults)
-    
-    let [isSearchForcused, setIsSearchForcused] = useState(false)
 
+    const [content, setContent ] = useState("") 
     const submitSearch = (event) => {
         if (event.keyCode === 13 && event.target.value !== "") {
             console.log(event.target.value)
-
+            
         }
     }
+    let query =  new URLSearchParams(useLocation().search);
 
+    const {path, url} = useRouteMatch();
     return (
-        <div>
-            <div className="search-conversation">
-                    <input 
-                        type="text" 
-                        placeholder='Find new friends...'
-                        onKeyUp= {submitSearch}
-                        onFocus= {() => setIsSearchForcused(prev => !prev)}
-                        onBlur= {() => setIsSearchForcused(prev => !prev)}
-                    />
-                    {!isSearchForcused&& <button>search</button>}
-            </div>
+        <div className="search-conversation">
+            <input 
+                type="text" 
+                placeholder='Find new friends...'
+                onKeyUp= {submitSearch}
+                onChange={e => setContent(e.target.value)}
+            />
+            <Link
+                to={`${url}search/${content}`}
+            >
+                <button>
+                    Search
+                </button>
+            </Link>
+            {/* <SearchResult/> */}
         </div>
+
     )
 }
 

@@ -1,16 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './UserItem.scss'
 
 import { NavLink, useRouteMatch } from 'react-router-dom'
 function UserItem(props) {
     const { data } =  props 
+    const { url } = useRouteMatch();
     // const ellipsis = true
     // console.log(data)
-    const { url } = useRouteMatch()
     return (
         <NavLink 
             exact
-            to={`${url}chat/${data.contactedId}`} 
+            to={`/chat/${data.contactedId}`} 
+            // to={`http://localhost:${3000}/chat/${data.contactedId}`} 
             style={{textDecoration: 'none', color:'inherit'}}
             activeStyle={{backgroundColor : "#3a3b3c"}}
         >
