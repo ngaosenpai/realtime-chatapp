@@ -1,3 +1,4 @@
+import { StarTwoTone } from "@ant-design/icons"
 import {
     FETCH_CONVERSATION_START,
     FETCH_CONVERSATION_SUCCESS,
@@ -59,6 +60,7 @@ export const conversationReducer = (state = initialState, action) => {
                     */
                 const { newMessage } = action.payload
                 const tempListPush = state.list
+            if (newMessage.newFriend === undefined){    
                 const founds = []
                 for(let i in tempListPush){
                     if((tempListPush[i].contactedId === newMessage.senderId) || 
@@ -68,6 +70,7 @@ export const conversationReducer = (state = initialState, action) => {
                         founds.push( [i, tempListPush[i]] )
                     }
                 }
+        
             
                 console.log(founds[0][0])
                 console.log(founds[0][1])
@@ -81,10 +84,47 @@ export const conversationReducer = (state = initialState, action) => {
                     lastedTime : newMessage.sentTime
                 })
 
+                console.log(`>0`)
                 return{
                     ...state,
                     list : [...tempListPush]
                 }
+            }
+            else if(newMessage.newFriend === false) {
+                const founds = []
+                for(let i in tempListPush){
+                    if((tempListPush[i].contactedId === newMessage.contactedId)
+                    ){
+                        console.log("found: ", i, tempListPush[i])
+                        founds.push( [i, tempListPush[i]] )
+                    }
+                }
+                
+                console.log(founds[0][0])
+                console.log(founds[0][1])
+                const oldMessageIndex = founds[0][0]
+                const oldMessage = founds[0][1]
+                tempListPush.splice(oldMessageIndex, 1)
+                
+                tempListPush.unshift({
+                    ...newMessage,
+                    name: oldMessage.name,
+                    content: oldMessage.content,
+                    
+                })
+
+                console.log(`>0`)
+                return{
+                    ...state,
+                    list : [...tempListPush]
+                }
+            }
+            else{
+                return {
+                    ...state,
+                    list: [newMessage, ...state.list]
+                }
+            }
 
         default : return state
 

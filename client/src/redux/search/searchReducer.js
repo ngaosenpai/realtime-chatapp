@@ -6,7 +6,8 @@ import {
 
 const initialState = {
     isLoading : false,
-    errors : []
+    data: [],
+    error : null,
 }
 
 export const searchReducer = (state = initialState, action) => {
@@ -18,21 +19,22 @@ export const searchReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading : true,
-                errors : []
+                error : null
             }
         
         case SEARCH_SUCCESS:
             return {
                 ...state,
                 isLoading : false,
-                errors : []
+                error : null,
+                data: [...payload.searchResults]
             }
         
         case SEARCH_FAILURE:
             return {
                 ...state,
                 isLoading : false,
-                errors : [payload]
+                error : payload.error
             }
         
         default: return state

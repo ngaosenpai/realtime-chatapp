@@ -7,6 +7,7 @@ import { watchLogin } from "./loginSaga"
 import { watchRegister } from "./registerSaga"
 import { watchProcessMessages } from "./messagesSaga"
 import { watchFetchConversation } from "./conversationSaga"
+import { watchSearch } from "./searchSaga"
 
 export default function* rootSaga(){
     yield all([
@@ -16,6 +17,7 @@ export default function* rootSaga(){
         watchLogin(),
         watchRegister(),
         watchProcessMessages(),
-        watchFetchConversation()
+        watchFetchConversation(),
+        watchSearch()
     ])
 }

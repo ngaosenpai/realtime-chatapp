@@ -8,7 +8,6 @@ import {
     FETCH_CONVERSATION_FAILURE
 } from "../redux/conversation/conversationActionType"
 
-
 function* workerFetchConversation(action){
 
     try {

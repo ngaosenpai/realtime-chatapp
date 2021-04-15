@@ -296,3 +296,19 @@ module.exports.user_conversation = (req, res) => {
         })
     }
 }
+
+module.exports.user_search = (req, res) => {
+    let { search } = req.body;
+    console.log(`search`)
+    console.log(search)
+    User.find({"locals.name": {$regex: `.*${search}.*`}})
+        .then(response => {
+            console.log(`response`)
+            console.log(response)
+            res.json({
+                users: response
+            })
+        })
+        .catch(error => res.json({error: error.message}))
+        
+}
