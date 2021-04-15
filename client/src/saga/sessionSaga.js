@@ -31,7 +31,7 @@ export function* workerFetchSession(action){
               'Authorization': `Bearer ${token}` 
             }
         })
-        yield console.log(response)
+        console.log(response)
         //save to store
         let { user, error } = response.data
         if(user){

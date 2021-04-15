@@ -10,7 +10,7 @@ import { sessionReducer } from './session/sessionReducer'
 import { loginReducer } from "./login/loginReducer"
 import { registerReducer } from "./register/registerReducer"
 import { messagesReducer } from "./messages/messagesReducer"
-import { searchReducer } from "./search/searchReducer"
+import { conversationReducer } from "./conversation/conversationReducer"
 
 import rootSaga from '../saga/rootSaga'
 import { socketMiddleware } from "../socketClient"
@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
     login : loginReducer,
     register : registerReducer,
     currentMessages : messagesReducer,
-    searchResults: searchReducer,
+    conversation : conversationReducer
 })
 
 const store = createStore(

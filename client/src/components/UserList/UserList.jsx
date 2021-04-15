@@ -1,151 +1,22 @@
-import React from 'react';
-import './UserList.scss'
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux"
+
+import { FETCH_CONVERSATION } from "../../redux/conversation/conversationActionType"
 
 import UserItem from '../UserItem/UserItem';
 
+import './UserList.scss'
 function UserList(props) {
-    const usersList = [
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "aa",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        },
-        {
-            src: 'https://picsum.photos/200', 
-            name: "test user", 
-            msg: "test message hbjkjhhj dsadg asdgadb asjdga jasda ias dadi",
-            time: "1m"
-        }
-    ]
+
+    const dispatch = useDispatch()
     const { setShouldShowMenu } = props
-    // console.log(usersList)
+
+    const conversationList = useSelector(state => state.conversation.list)
+
+    useEffect(() => {
+        dispatch({ type : FETCH_CONVERSATION })
+    }, [])
+
     return (
         <div 
             className="user-list" 
@@ -157,7 +28,8 @@ function UserList(props) {
             }} 
         >
             {
-                usersList.map((item, i) => 
+
+                conversationList.map((item, i) => 
                     <UserItem 
                         key={i} 
                         id={i} 
