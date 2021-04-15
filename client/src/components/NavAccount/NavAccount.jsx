@@ -1,5 +1,6 @@
 import React from 'react';
 import './NavAccount.scss'
+import SearchConversation from '../SearchConversation/SearchConversation'
 import { CloseOutlined } from '@ant-design/icons';
 
 function NavAccount(props) {
@@ -13,10 +14,15 @@ function NavAccount(props) {
                     onClick={() => props.setShouldShowMenu(pre => !pre)}
                 />
             </div>
-            <div className="nav-account__search">
-                <input type="text" placeholder='Find new friends...'/>
+            <SearchConversation />
+            {/* <div className="nav-account__search">
+                <input 
+                    type="text" 
+                    placeholder='Find new friends...'
+
+                />
                 <button>search</button>
-            </div>
+            </div> */}
         </div>
     );
 }

@@ -7,6 +7,8 @@ import {
 
 import ChatMain from '../ChatMain/ChatMain';
 import LeftNav from '../LeftNav/LeftNav'
+import SearchResult from '../SearchResult/SearchResult'
+import Profile from '../Profile/Profile'
 import './RightMain.scss'
 function RightMain(props) {
     const { path, url } = useRouteMatch();
@@ -25,16 +27,18 @@ function RightMain(props) {
 
 
                 <Route  path={`${path}chat/:userId`}>
-                    { <ChatMain setShouldShowMenu={setShouldShowMenu} shouldShowMenu={shouldShowMenu} />}
+                    { <ChatMain shouldShowMenu={shouldShowMenu} setShouldShowMenu={setShouldShowMenu}/>}
                 </Route>
                 
                 <Route exact path={`${path}user`}>
-                    <p>User</p>
+                    <Profile/>
                 </Route>
                 <Route exact path={`${path}search`}>
-                    <p>Search</p>
+                    <SearchResult 
+                        // showSearchResult={showSearchResult} 
+                        // setShowSearchResult={setShowSearchResult}
+                    />
                 </Route>
-
                 <Route exact path={`${path}`}>
                     <p>Wellcome</p>
                 </Route>

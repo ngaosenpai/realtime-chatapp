@@ -33,7 +33,8 @@ function UserItem(props) {
                 </div>
 
                 <div className="user-item__right">
-                    <img src={data.src} alt=""/>
+                    {/* <img src={data.src} alt=""/> */}
+                    <img src={data.seen} alt=""/>
                 </div>
             </div>
         </Link>

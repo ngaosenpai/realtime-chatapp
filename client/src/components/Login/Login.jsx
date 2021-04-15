@@ -8,6 +8,15 @@ import './Login.scss'
 function Login(props) {
 
     const dispatch = useDispatch()
+    const submitHandler = (event) =>{
+        let {username, password} = content
+        if(event.keyCode === 13 && username && password) {
+            dispatch({
+                type : LOGIN,
+                payload : content
+            })
+        }
+    }
     const {login, jwt, session} = useSelector(state => ({ 
         login : state.login, 
         jwt : state.jwt,
@@ -47,11 +56,13 @@ function Login(props) {
                             type="text" 
                             placeholder="Username"
                             onChange={e => setContent({...content, username : e.target.value})}
+                            onKeyUp={submitHandler}
                         />
                         <input 
                             type="password" 
                             placeholder="Password"
                             onChange={e => setContent({...content, password : e.target.value})}
+                            onKeyUp={submitHandler}
                         />
                         <button 
                             disabled={login.isLoading}
