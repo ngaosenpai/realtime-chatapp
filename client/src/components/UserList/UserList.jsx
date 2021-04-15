@@ -4,7 +4,7 @@ import './UserList.scss'
 import UserItem from '../UserItem/UserItem';
 
 function UserList(props) {
-    const test = [
+    const usersList = [
         {
             src: 'https://picsum.photos/200', 
             name: "test user", 
@@ -144,8 +144,8 @@ function UserList(props) {
             time: "1m"
         }
     ]
-    // console.log(props)
     const { setShouldShowMenu } = props
+    // console.log(usersList)
     return (
         <div 
             className="user-list" 
@@ -157,12 +157,11 @@ function UserList(props) {
             }} 
         >
             {
-                test.map((item, i) => 
+                usersList.map((item, i) => 
                     <UserItem 
                         key={i} 
                         id={i} 
                         data={item} 
-                        
                     />
                 )
             }

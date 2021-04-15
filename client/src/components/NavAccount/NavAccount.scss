@@ -25,28 +25,28 @@
             }
         }
     }
-    &__search{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 10px 0;
+    // &__search{
+    //     display: flex;
+    //     justify-content: center;
+    //     align-items: center;
+    //     margin: 10px 0;
 
-        input{
-            flex-grow: 1;
-            padding: 5px 10px;
-            border-radius: 20px;
-            background-color: #b0b3b8;
-            margin-right: 5px;
-            border: none;
-            outline: none;
-        }
-        button{
-            padding: 5px;
-            border: none;
-            outline: none;
-            background-color: #3a3b3c;
-            border-radius: 5px;
-            color: #e4e6eb;
-        }
-    }
+    //     input{
+    //         flex-grow: 1;
+    //         padding: 5px 10px;
+    //         border-radius: 20px;
+    //         background-color: #b0b3b8;
+    //         margin-right: 5px;
+    //         border: none;
+    //         outline: none;
+    //     }
+    //     button{
+    //         padding: 5px;
+    //         border: none;
+    //         outline: none;
+    //         background-color: #3a3b3c;
+    //         border-radius: 5px;
+    //         color: #e4e6eb;
+    //     }
+    // }
 }

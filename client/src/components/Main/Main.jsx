@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {  } from 'react';
 // import UserList from '../UserList/UserList';
 // import UserItem from '../UserItem/UserItem'
 import './Main.scss'
