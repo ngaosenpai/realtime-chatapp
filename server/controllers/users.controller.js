@@ -298,12 +298,13 @@ module.exports.user_conversation = (req, res) => {
 }
 
 module.exports.user_search = (req, res) => {
-    let { search } = req.body;
+    let { search, userId } = req.body;
     console.log(`search`)
     console.log(search)
     User.find({"locals.name": {$regex: `.*${search}.*`}})
         .then(response => {
-            console.log(`response`)
+            response = response.filter(user => user._id != userId)
+            console.log(`Search Response list user`)
             console.log(response)
             res.json({
                 users: response

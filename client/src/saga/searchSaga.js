@@ -17,6 +17,7 @@ export function* workerSearch(action) {
         yield put({type: SEARCH_START});
         // send search request
 
+        const userId = yield select(state => state.session.user._id);
         const token = yield select(state => state.jwt.token);
         const header = {
             headers: {
@@ -24,10 +25,9 @@ export function* workerSearch(action) {
             }
         }
         const response = yield axios.post("http://localhost:4000/users/search", {
-            search
+            search, userId
         }, header)
-        console.log(`search`)
-        console.log(search)
+        console.log(`Search ${search}`)
         if (response.data.users) {
             yield put({type: SEARCH_SUCCESS, payload: { 
                 searchResults: response.data.users
