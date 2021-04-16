@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from "react-redux"
 
 import './NavAccount.scss'
+import SearchConversation from '../SearchConversation/SearchConversation'
 import { CloseOutlined } from '@ant-design/icons';
 
 function NavAccount(props) {
     const user = useSelector(state => state.session.user)
+    useEffect(() =>{
+        console.log(`user`)
+        console.log(user)
+    }, [])
     return (
         <div className="nav-account">
             <div className="nav-account__user">
@@ -15,10 +20,15 @@ function NavAccount(props) {
                     onClick={() => props.setShouldShowMenu(pre => !pre)}
                 />
             </div>
-            <div className="nav-account__search">
-                <input type="text" placeholder='Find new friends...'/>
+            <SearchConversation />
+            {/* <div className="nav-account__search">
+                <input 
+                    type="text" 
+                    placeholder='Find new friends...'
+
+                />
                 <button>search</button>
-            </div>
+            </div> */}
         </div>
     );
 }

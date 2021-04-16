@@ -1,0 +1,17 @@
+.search-result {
+    display: block;
+    p {
+        padding: 10px
+    }
+    &__see-more {
+        padding: 10px 20px;
+        button {
+            padding: 10px;
+            width : 100%;
+            outline: none;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: rgb(55, 127, 221);
+        }
+    }
+}

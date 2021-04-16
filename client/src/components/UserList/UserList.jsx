@@ -28,12 +28,12 @@ function UserList(props) {
             }} 
         >
             {
+
                 conversationList.map((item, i) => 
                     <UserItem 
                         key={i} 
                         id={i} 
                         data={item} 
-                        
                     />
                 )
             }

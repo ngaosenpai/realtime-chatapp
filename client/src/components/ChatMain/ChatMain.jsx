@@ -58,11 +58,12 @@ function ChatMain(props) {
             }
         };
 
-        document.addEventListener("keydown", listener);
+        document.addEventListener("keyup", listener);
         
+        console.log(targetUser)
 
         return () => {
-            document.removeEventListener("keydown", listener);
+            document.removeEventListener("keyup", listener);
             
         };
     }, [userId])
@@ -76,7 +77,9 @@ function ChatMain(props) {
                     <img src="https://picsum.photos/200" alt=""/>
                 </div>
                 <div className="chat-main__header__name">
-                    <p>{targetUser[0].name} </p>
+                    <p>
+                        {targetUser[0].name} 
+                    </p>
                 </div>
                 { !shouldShowMenu && <UnorderedListOutlined 
                     style={{zIndex:99}}
@@ -111,13 +114,15 @@ function ChatMain(props) {
                 <button
                     ref={refBtn}
                     onClick={() => {
-                        dispatch({
-                            type : SEND_MESSAGE,
-                            payload : {
-                                receiverId : userId,
-                                content
-                            }
-                        })
+                        if (content) {
+                            dispatch({
+                                type : SEND_MESSAGE,
+                                payload : {
+                                    receiverId : userId,
+                                    content
+                                }
+                            })
+                        }
                     }}
                 >Send</button>
             </div>

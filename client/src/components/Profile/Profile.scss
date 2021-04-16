@@ -1,0 +1,49 @@
+.profile {
+    width: 100%;
+    background: linear-gradient(#6b6c6c, #000000);
+    margin: 0;
+    margin: 0;
+    position: relative;
+    &-background-img {
+        height: 10vh;
+        img {
+            border-radius: 0 0 15px 15px;
+            // clip-path: rect(0, 100px, 200px, 0);
+            height: 30vh;
+            width: 40vw;
+            object-fit: fill;
+        }
+    }
+
+    &-front {
+        &-img {
+            img {
+                border-radius: 100%;
+                clip: circle(40%)
+            }
+        }
+        &-info {
+            h1 {
+                color: white;
+            }
+            &-action {
+                padding: 10px 50px;
+                border-top: solid  0.5px rgb(102, 102, 102);
+                height: 70px;
+                justify-content: center;
+                button {
+                    color: white;
+                    margin: 5px;
+                    background-color: rgb(55, 127, 221);
+                    padding: 10px;
+                    border: none;
+                    outline: none;
+
+                    .isNotFriend {
+                        background-color: rgb(102, 102, 102);
+                    }
+                }
+            }
+        }
+    }
+}
