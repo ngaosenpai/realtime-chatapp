@@ -14,18 +14,18 @@ function ChatMain(props) {
     // const devId = '606836ab9158801258ac3498'
     // const adminId = '60688ba34507a14e9caf541a'
     const { shouldShowMenu, setShouldShowMenu } = props
-    const {userId} = useParams()
+    const {targetId} = useParams()
 
     const currentMessages = useSelector(state => state.currentMessages)
     const session = useSelector(state => state.session)
     const list = useSelector(state => state.conversation.list)
-    const targetUser = list.filter(item => item.contactedId === userId)
+    const targetConversation = list.filter(item => item.contactedId === targetId)
 
     const dispatch = useDispatch()
 
     const [content, setContent] = useState("")
     // const {path} = useRouteMatch
-    console.log("url: ", userId)
+    console.log("url: ", targetId)
     
     const refBtn = useRef(null)
     const refScroll = useRef(null)
@@ -46,7 +46,7 @@ function ChatMain(props) {
             type : FETCH_MESSAGES,
             payload : {
                 senderId : session.user._id, 
-                receiverId : userId,
+                receiverId : targetId,
                 // skip : currentMessages.skip
             }
         })
@@ -60,13 +60,13 @@ function ChatMain(props) {
 
         document.addEventListener("keyup", listener);
         
-        console.log(targetUser)
+        console.log(targetConversation)
 
         return () => {
             document.removeEventListener("keyup", listener);
             
         };
-    }, [userId])
+    }, [targetId])
 
     
 
@@ -78,7 +78,7 @@ function ChatMain(props) {
                 </div>
                 <div className="chat-main__header__name">
                     <p>
-                        {targetUser[0].name} 
+                        {`To ${targetConversation[0].name}`} 
                     </p>
                 </div>
                 { !shouldShowMenu && <UnorderedListOutlined 
@@ -118,7 +118,7 @@ function ChatMain(props) {
                             dispatch({
                                 type : SEND_MESSAGE,
                                 payload : {
-                                    receiverId : userId,
+                                    receiverId : targetId,
                                     content
                                 }
                             })

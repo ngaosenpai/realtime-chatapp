@@ -23,7 +23,7 @@ function RightMain(props) {
             </div>
             {/* this wil contain routes: chat, search result, info user*/}
             <Switch>
-                <Route  path={`/chat/:userId`}>
+                <Route  path={`/chat/:targetId`}>
                     { <ChatMain shouldShowMenu={shouldShowMenu} setShouldShowMenu={setShouldShowMenu}/>}
                 </Route>
                 
