@@ -5,7 +5,8 @@ import {
 } from "./redux/messages/messagesActionType"
 
 import {
-    PUSH_CONVERSATION
+    PUSH_CONVERSATION,
+    MAKE_CONVERSATION
 } from "./redux/conversation/conversationActionType"
 
 import { io } from 'socket.io-client';
@@ -31,6 +32,30 @@ export const socketMiddleware = storeAPI => next => action => {
         //
         socket.on("test", (data) => {
             console.log("server send: ", data)
+        })
+        socket.on("server-make-conversation", function(data) {
+            let {user1, user2 } = data
+            let targetUser  
+            if(user1._id === user._id){
+                targetUser = user2
+            } else {
+                targetUser = user1
+            }
+            console.log(targetUser)
+            storeAPI.dispatch({ 
+                type: PUSH_CONVERSATION,
+                payload :  {
+                    newMessage: {
+                        name : targetUser.locals.name,
+                        contactedId : targetUser._id,
+                        receiverId: targetUser._id,
+                        lastedMessage : "",
+                        lastedTime : Date().now,
+                    }
+                }
+            })
+            
+            
         })
 
         socket.on("server-send-message", function(data) {
@@ -79,5 +104,13 @@ export const socketMiddleware = storeAPI => next => action => {
             content 
         })
 
-    } else return next(action)
+    } else if (action.type === MAKE_CONVERSATION) {
+        socket.emit("client-make-conversation", {
+            userId : user._id, 
+            targetId: action.payload.targetId,
+
+        })  
+    }
+    
+    else return next(action)
 }

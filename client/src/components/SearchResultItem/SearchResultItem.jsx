@@ -1,57 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import {MessageOutlined} from '@ant-design/icons'
-import { Link,  } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useSelector, useDispatch} from 'react-redux'
 import './SearchResultItem.scss'
 import axios from 'axios';
-import { PUSH_CONVERSATION } from '../../redux/conversation/conversationActionType'
+import { PUSH_CONVERSATION, MAKE_CONVERSATION } from '../../redux/conversation/conversationActionType'
 function SearchResultItem(props) {
     const { data } =  props 
     const store = useSelector(state => state)
     const dispatch = useDispatch();
+    const [click, setClick] = useState(false)
+    const history = useHistory();
     const handlerClick = () => {
-        const header = {
-            headers: {
-                'Authorization': `Bearer ${store.jwt.token}` 
-            }
-        }
-
-        axios.post("http://localhost:4000/conversation/make", {
-            userId: store.session.user, 
-            targetId: data.id 
-        }, header)
-            .then((response) => {
-                let {user, targetUser} = response.data
-                if (![user, targetUser].every(Boolean)) {
-                    if (user !== null && targetUser !== null) {
-                        dispatch({
-                            type : PUSH_CONVERSATION,
-                            payload : {
-                                newMessage: {
-                                    name: user.locals.name,
-                                    contactedId: targetUser._id,
-                                    content: "",
-                                    sentTime: Date().now,
-                                    newFriend: true,
-                                }
-                            }
-                        })
-                    }
-                    else{
-                        dispatch({
-                            type: PUSH_CONVERSATION,
-                            payload: {
-                                newMessage: {
-                                    contactedId: data.id,
-                                    sentTime: Date().now,
-                                    newFriend: false,
-                                }
-                            }
-                        })
-                    }
+        if (data.id !== store.session.user._id) {
+            setClick((prev) =>!prev)
+            dispatch({ 
+                type:   MAKE_CONVERSATION,
+                payload: {
+                    targetId: data.id
                 }
             })
+        }
     }
+    function isFirst(id, list) {
+        return list[0].contactedId === id;
+    }
+    useEffect(() => {
+        if (store.conversation.list.length !== 0) {
+            if (click && isFirst(data.id, store.conversation.list)) {
+                history.push(`/chat/${data.id}`)
+            }
+        }
+    },[store.conversation.list, click])
     return (
         <div className="search-result-item">
             <div className="search-result-item__left">
@@ -70,12 +50,17 @@ function SearchResultItem(props) {
                 </div>
             </div>
             <div className="search-result-item__right">
-                <button
-                    onClick={handlerClick}
-                >
-                    <MessageOutlined />
-                    Message
-                </button>        
+                {/* <Link
+                    to={`/chat/${data.id}`}
+                > */}
+                    <button
+                        onClick={handlerClick}
+                    >
+                        <MessageOutlined />
+                        Message
+                    </button>        
+                {/* </Link> */}
+
             </div>
         </div>
     );
