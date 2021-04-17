@@ -24,7 +24,7 @@ export const conversationReducer = (state = initialState, action) => {
         
         case FETCH_CONVERSATION_SUCCESS:
 
-            const tempList = [...state.list, ...action.payload.conversationList]
+            const tempList = [ ...action.payload.conversationList]
             tempList.sort((prev, next) => next.lastedTime - prev.lastedTime) //sap giam dan
             return {
                 ...state,

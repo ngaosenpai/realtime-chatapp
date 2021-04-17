@@ -1,7 +1,10 @@
 const router = require('express').Router();
-
+const multer = require('multer')
 const controller = require('../controllers/auths.controller')
 const jwtRoute = require('./jwt.route')
+
+const storage = multer.memoryStorage();
+const multerUploads = multer({ storage }).single('file');
 
 router.get('/', controller.index)
 router.route('/login')
@@ -9,7 +12,7 @@ router.route('/login')
     .post(controller.login)
 router.route('/register')
     .get(controller.registerForm)
-    .post(controller.register)
+    .post(multerUploads, controller.register)
 router.post('/logout', controller.logout)
 router.use('/jwt', jwtRoute)
 

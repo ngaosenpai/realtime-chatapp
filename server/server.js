@@ -58,8 +58,8 @@ const authsRoute = require('./routes/auths.route')
 const {authenticateToken, formatMessage} = require('./middlewares/index.middleware')
 
 app.use('/auths', authsRoute)
-app.use('/', authenticateToken, homeRoute)
-// app.use('/', homeRoute)
+// app.use('/', authenticateToken, homeRoute)
+app.use('/', homeRoute)
 
 const PORT = process.env.PORT || 3000;
 
@@ -103,6 +103,25 @@ io.on('connection', socket => {
         socket.emit("test", "send after 5s")
     }, 5000)
 
+    socket.on("client-make-conversation", async ({userId, targetId}) => {
+        await Promise.all([
+            User.findOneAndUpdate({
+                _id : userId,
+                contact : { $ne : targetId }
+            }, { $push : { contact : targetId } }, { new : true }).exec(),
+            User.findOneAndUpdate({
+                _id : targetId,
+                contact : { $ne : userId }
+            }, { $push : { contact : userId } }, { new : true }).exec()
+        ])
+        const [user1, user2] = await Promise.all([
+            User.findById(userId).exec(),
+            User.findById(targetId).exec()
+        ])
+        io.to(user1.socketId).emit("server-make-conversation", {user1, user2})
+        io.to(user2.socketId).emit("server-make-conversation", {user1, user2})
+
+    })
     socket.on("client-send-message", async ({senderId, receiverId, content}) => {
 
         try {

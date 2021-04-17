@@ -228,7 +228,8 @@ module.exports.user_token = (req, res) => {
                 message: "Getting user with valid token successfully",
                 user: {
                     _id: user._id,
-                    name: user.locals.name
+                    name: user.locals.name,
+                    image: user.locals.image,
                 }
             })
         }
