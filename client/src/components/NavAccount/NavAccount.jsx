@@ -20,7 +20,7 @@ function NavAccount(props) {
     return (
         <div className="nav-account">
             <div className="nav-account__user">
-                <img src="https://picsum.photos/200" alt=""/>
+                <img src={user.image} alt="Avatar user"/>
                 <p>{`Chào ${user.name}!`}</p>
                 <button
                     onClick={()=>{

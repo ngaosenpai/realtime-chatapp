@@ -108,10 +108,24 @@
             //     // margin: ;
             // }
         }
+        
+        &__img-uploader {
+            display: block;
+            img {
+                display: block;
+            }
+        }
     }
 
     &__footer{
         padding-bottom: 1em;
         align-self: center;
     }
+}
+
+.upload-button {
+    color: "white";
+    border: "1px solid";
+    width: "20%";
+    margin: "10px auto 20px auto";
 }

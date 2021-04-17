@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const DatauriParser = require('datauri/parser');
 
 // const { User } = require('../models')
+const { cloudinary } = require('../middlewares/utils/cloudinary');
 const User = require('../models/user.model')
 const { optionRefreshToken, optionAccessToken } = require('../config/index.config')
 const handleErrors = (err) => {
@@ -143,6 +145,9 @@ module.exports.register = async (req, res) => {
             throw new Error('Invalid required method');
         }
         else {
+            console.log(`upload file`)
+            console.log(req.file)
+            
             let { username, password, email, name, phone } = req.body
             if (![ username, password, email, name, phone ].every(Boolean)) {
                 throw new Error('Invalid arguments required');
@@ -157,33 +162,50 @@ module.exports.register = async (req, res) => {
                             })
                         }
                         else {
-                            let newUser = {
-                                locals: {
-                                    username,
-                                    password,
-                                    name,
-                                    email,
-                                    phone
+                            const parser = new DatauriParser();
+                            const changeToBase64 = req => {
+                                let ext = req.file.originalname.split(".")
+                                ext = `.${ext.pop()}`
+                                console.log(ext)
+                                return parser.format(ext.toString(), req.file.buffer)
+                            } 
+
+                            if(req.file) {
+
+                                const base64 = changeToBase64(req).content;
+                                // console.log(req.file)
+                                // console.log(base64)
+                                const response = await cloudinary.uploader.upload(base64)
+                                let newUser = {
+                                    locals: {
+                                        username,
+                                        password,
+                                        name,
+                                        email,
+                                        phone,
+                                        image: response.url
+                                    },
+                                    
                                 }
+                                await User.create(newUser)
+                                    .then(result => {
+                                        if (result) {
+                                            return res.json({ 
+                                                code : 200, 
+                                                message : "Creating new user is successful",
+                                                data : newUser
+                                            })
+                                        }
+                                        else throw new Error("Creating new user is failed")
+                                    })
                             }
-                            await User.create(newUser)
-                                .then(result => {
-                                    if (result) {
-                                        return res.json({ 
-                                            code : 200, 
-                                            message : "Creating new user is successful",
-                                            data : newUser
-                                        })
-                                    }
-                                    else throw new Error("Creating new user is failed")
-                                })
                         }
                     })
                     .catch(err => res.json({ 
                         code: 404, 
                         message: err.message,
                     }))
-            }
+                }
         }
     }
     catch (error) { 
