@@ -203,7 +203,7 @@ module.exports.register = async (req, res) => {
                     })
                     .catch(err => res.json({ 
                         code: 404, 
-                        message: err.message,
+                        message: "There is an existing user",
                     }))
                 }
         }
