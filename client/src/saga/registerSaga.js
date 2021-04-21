@@ -18,41 +18,24 @@ export function* workerRegister(action) {
         
         // if (![file, username, password, email, name, phone].every(Boolean)) throw new Error("Please fill all fields");
         yield put({type: REGISTER_START});
-        // send register request
-        const header = {
-            headers: {
-            "Content-Type": "multipart/form-data",
-            "Accept": "application/json",
-            "type": "formData",
-          }
-        }
-        // {
-        //     method: "post",
-        //     url: "myurl",
-        //     data: bodyFormData,
-        //     headers: { "Content-Type": "multipart/form-data" },
-        //   }
+        
         const response = yield axios({
             method: "post",
             url: "http://localhost:4000/auths/register",
             data: data,
             headers: { "Content-Type": "multipart/form-data" },
-          })
-        // const response = yield axios.post(`http://localhost:4000/auths/register`, {
-        //     name : data.get("name"), 
-        //     email: data.get("email"), 
-        //     phone: data.get("phone"), 
-        //     username : data.get("username"), 
-        //     password: data.get("password"), 
-        //     file: data.get("file"),
-        // }, header)
+        })
+
         yield console.log(response);
-        let {username, password} = response.data.data.locals
-
-        yield put({type: REGISTER_SUCCESS})
-        yield put({type: LOGIN, payload: {username, password}})
-        yield put({type: LOGIN_SUCCESS})
-
+        if (response.data.data !== undefined) {
+            let {username, password} = response.data.data.locals
+            yield put({type: REGISTER_SUCCESS})
+            yield put({type: LOGIN, payload: {username, password}})
+            yield put({type: LOGIN_SUCCESS})
+        }
+        else {
+            throw Error(response.data.message)
+        }
     } catch (error) {
         console.log(error)
         yield put({type: REGISTER_FAILURE, payload: error})
