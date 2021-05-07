@@ -1,17 +1,15 @@
-import React, {useEffect} from 'react';
+import React from 'react';
+import Moment from "react-moment";
 import './UserItem.scss'
 
-import { NavLink, useRouteMatch } from 'react-router-dom'
+import { NavLink, } from 'react-router-dom'
 function UserItem(props) {
     const { data } =  props 
-    const { url } = useRouteMatch();
-    // const ellipsis = true
-    // console.log(data)
+    
     return (
         <NavLink 
             exact
             to={`/chat/${data.contactedId}`} 
-            // to={`http://localhost:${3000}/chat/${data.contactedId}`} 
             style={{textDecoration: 'none', color:'inherit'}}
             activeStyle={{backgroundColor : "#3a3b3c"}}
         >
@@ -33,18 +31,13 @@ function UserItem(props) {
                         </div>
                     
                         <div className="user-item__center__content__time">
-                            <p>{` -${0}`}</p>
+                            {data.lastedTime && <Moment style={{color: "gray"}}fromNow>{new Date(data.lastedTime)}</Moment>}
                         </div>
                     </div>
                 </div>
 
                 <div className="user-item__right">
-
-                    {/* <img src={data.src} alt=""/> */}
-                    {/* <img src={data.seen} alt=""/> */}
                     <img src={`https://picsum.photos/200`} alt=""/>
-
-
                 </div>
             </div>
         </NavLink>
