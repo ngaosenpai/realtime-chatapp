@@ -48,6 +48,17 @@
         }
     }
 
+    &__announce{
+        p{
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #0096C7;
+            font-weight: bold;
+            font-size: 0.75em;
+            border-radius: 10px;
+        }
+    }
+
     &__body{
         display: flex;
         flex-direction: column;

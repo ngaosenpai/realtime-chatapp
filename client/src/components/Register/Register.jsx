@@ -141,6 +141,10 @@ function Register(props) {
                     </div>
                     <div className="register-form__alert">
                         {state.errors.map((error, i) => (<p key={i}>{error.message}</p>))}
+                        {content.error !== null && <p> {content.error}</p>}
+                    </div>
+                    <div className="register-form__announce">
+                        {content.error === null && state.finnish && <p> Đăng kí thành công</p>}
                     </div>
                     <div className="register-form__body">
                         <form onSubmit={event => event.preventDefault()}>
@@ -198,8 +202,7 @@ function Register(props) {
                                     />
                                 </div>
                             </div>
-                            {content.error !== null && <p> {content.error}</p>}
-                            {content.error === null && state.finnish && <p> Đăng kí thành công</p>}
+                            
                             <button 
                                 type="submit"
                                 disabled={state.isLoading}
