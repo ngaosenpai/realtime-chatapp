@@ -1,5 +1,5 @@
 import React, { useState, useEffect, } from 'react'
-import { useParams,  } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { useSelector, useDispatch} from 'react-redux'
 import SearchResultItem from '../SearchResultItem/SearchResultItem'
 
@@ -9,14 +9,13 @@ import './SearchResult.scss'
 function SearchResult (props) {
     
     const result = useSelector(state => state.searchResults) 
+    const { user: currentUser } = useSelector(state => state.session) 
     const dispatch = useDispatch();
     const { search } = useParams();
 
     useEffect(()=> {
         dispatch({ type: SEARCH, payload: {search}})
     },[search])
-
-    
 
     return (
         <div 
@@ -29,13 +28,15 @@ function SearchResult (props) {
                         key={user._id}
                         data={{
                             id: user._id,
-                            img: "https://picsum.photos/200",
+                            img: user.locals.image || "https://picsum.photos/100",
                             name: user.locals.name,
-                            description: "Friend",
-                    }}/>
+                            description: user.contact.includes(currentUser)? "Friend": "Not in Contact",
+                        }}/>
             )}
             <div className="search-result__see-more">
-                <button>See More</button>
+                <Link to="/">
+                    <button>Back Home</button>
+                </Link>
             </div>
         </div>
     )

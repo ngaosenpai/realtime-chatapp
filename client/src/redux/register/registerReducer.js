@@ -6,6 +6,7 @@ import {
 
 const initialState = {
     isLoading : false,
+    finnish: false,
     errors : []
 }
 
@@ -25,7 +26,8 @@ export const registerReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading : false,
-                errors : []
+                finnish: true,
+                errors : [],
             }
         
         case REGISTER_FAILURE:

@@ -35,7 +35,7 @@ module.exports.user_index = (req, res) => {
                 error: error.message,
                 title: "Getting users failed" 
             })
-        }        
+        }         
     }
 }
 
@@ -303,6 +303,7 @@ module.exports.user_search = (req, res) => {
     console.log(`search`)
     console.log(search)
     User.find({"locals.name": {$regex: `.*${search}.*`}})
+    // User.find({$text: search})
         .then(response => {
             response = response.filter(user => user._id != userId)
             console.log(`Search Response list user`)

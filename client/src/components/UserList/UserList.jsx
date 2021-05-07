@@ -6,6 +6,7 @@ import { FETCH_CONVERSATION } from "../../redux/conversation/conversationActionT
 import UserItem from '../UserItem/UserItem';
 
 import './UserList.scss'
+
 function UserList(props) {
 
     const dispatch = useDispatch()
