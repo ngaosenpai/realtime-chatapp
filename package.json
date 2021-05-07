@@ -4,7 +4,7 @@
   "description": "realtime chat app",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node ./server/server.js",
     "dev": "nodemon --inspect server.js",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false cd client && npm install && npm run build && cd ../server && npm install"
   },
