@@ -35,11 +35,11 @@ function SearchResultItem(props) {
     return (
         <div className="search-result-item">
             <div className="search-result-item__left">
-                <img src={data.img} alt="Image of search result item"/>
+                <img src={data.img} alt="Search result"/>
             </div>
             <div className="search-result-item__center">
                 <div className="search-result-item__center__name">
-                    <p>{`${data.name} ${data.id}`}</p>
+                    <p>{`${data.name}`}</p>
                 </div>
                 <div className="search-result-item__center__content">
                     <div className="search-result-item__center__content__info">
