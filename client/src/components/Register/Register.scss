@@ -76,6 +76,20 @@
             }
         }
 
+        p {
+            width: 100%;
+            margin-bottom: 1em;
+            padding: 8px 15px;
+
+            border-radius: 20px;
+            border: 3px solid transparent;
+            outline: none;
+            font-weight: bold;
+            color: white;
+            background-color: #EE8586;
+
+        }
+
         button{
             width: fit-content;
             padding: 8px 15px;
@@ -111,8 +125,15 @@
         
         &__img-uploader {
             display: block;
+            background-color: white;
+            width: 400px;
             img {
                 display: block;
+            }
+
+            &__img {
+
+                width: 400px;
             }
         }
     }
