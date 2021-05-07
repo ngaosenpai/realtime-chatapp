@@ -26,7 +26,8 @@ export function* workerFetchSession(action){
         // start fetch session (user info)
         yield put({type : FETCH_SESSION_START})
         //ajax
-        const response = yield axios.get(`http://localhost:4000/users/token/${token}`, {
+        // const response = yield axios.get(`http://localhost:4000/users/token/${token}`, {
+        const response = yield axios.get(`${process.env.REACT_APP_SERVER_URL}/users/token/${token}`, {
             headers: {
               'Authorization': `Bearer ${token}` 
             }
@@ -42,7 +43,7 @@ export function* workerFetchSession(action){
                 }
             }
             // // IMPLEMENT SOCKET
-            // const socket = yield io("http://localhost:4000", handshake)
+            // const socket = yield io("${process.env.REACT_APP_SERVER_URL}", handshake)
             // console.log(socket)
             // user = { ...user, socket : socket }
             // //

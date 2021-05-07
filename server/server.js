@@ -1,5 +1,6 @@
 if(process.env.NODE_ENV !== 'production'){
-    require('dotenv').config({path: './config/.env'})
+    // require('dotenv').config({path: './config/.env'})
+    require('dotenv').config({path: '../client/.env'});
 }
 
 const express = require('express');
@@ -23,7 +24,8 @@ const Message = require("./models/message.model")
 
 app.use('/public', express.static('public'));
 app.use(cors({
-    origin: 'http://localhost:3000',
+    // origin: 'http://localhost:3000',
+    origin: process.env.REACT_APP_CLIENT_URL,
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }))
 app.use(express.urlencoded({ extended: true }));
@@ -74,10 +76,10 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.SERVER_POST || 4000;
 
 server.listen( PORT, () => {
-    console.log(`server listening on port ${PORT}: http://localhost:${PORT}`);
+    console.log(`server listening on port ${PORT}: ${process.env.REACT_APP_SERVER_URL}/`);
 })
 
 
@@ -87,7 +89,8 @@ server.listen( PORT, () => {
 
 const io = socketio(server, {
     cors: {
-      origin: 'http://localhost:3000',
+    //   origin: 'http://localhost:3000',
+      origin: process.env.REACT_APP_CLIENT_URL,
     }
 });
 

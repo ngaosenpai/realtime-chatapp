@@ -33,6 +33,7 @@ function App() {
 
   useEffect(() => {
     console.log('re-render')
+    console.log(process.env)
     console.log(jwt)
     console.log(user)
   })
