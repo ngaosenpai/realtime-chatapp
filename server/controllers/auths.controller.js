@@ -30,7 +30,6 @@ const handleErrors = (err) => {
 }
 
 const generateAccessToken = (user) => jwt.sign({user}, process.env.ACCESS_TOKEN_SECRET, optionAccessToken)
-// const generateAccessToken = (user) => jwt.sign({user}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: maxAge })
 const generateRefreshToken = (user) => jwt.sign({user}, process.env.REFRESH_TOKEN_SECRET)
 
 let refreshTokens = []
@@ -146,7 +145,7 @@ module.exports.register = async (req, res) => {
         }
         else {
             console.log(`upload file`)
-            console.log(req.file)
+            // console.log(req.file)
             
             let { username, password, email, name, phone } = req.body
             if (![ username, password, email, name, phone ].every(Boolean)) {
@@ -166,7 +165,7 @@ module.exports.register = async (req, res) => {
                             const changeToBase64 = req => {
                                 let ext = req.file.originalname.split(".")
                                 ext = `.${ext.pop()}`
-                                console.log(ext)
+                                // console.log(ext)
                                 return parser.format(ext.toString(), req.file.buffer)
                             } 
 
