@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 const socketio = require('socket.io')
 const http = require('http')
 const cors = require("cors")
-
+const path = require('path')
 
 const app = express();
 const server = http.createServer(app);
@@ -60,6 +60,19 @@ const {authenticateToken, formatMessage} = require('./middlewares/index.middlewa
 app.use('/auths', authsRoute)
 // app.use('/', authenticateToken, homeRoute)
 app.use('/', homeRoute)
+
+// Serve static assets in production
+if (process.env.NODE_ENV === 'production') {
+
+    // Set static folder
+    app.use(express.static("../client/build"));
+
+    app.get("*", (req, res) => {
+
+        res.sendFile(path.resolve(__dirname, "..", "client", "build", "index.html"))
+        
+    });
+}
 
 const PORT = process.env.PORT || 3000;
 
