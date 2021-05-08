@@ -27,7 +27,7 @@ export function* workerFetchSession(action){
         yield put({type : FETCH_SESSION_START})
         //ajax
         // const response = yield axios.get(`http://localhost:4000/users/token/${token}`, {
-        const response = yield axios.get(`/users/token/${token}`, {
+        const response = yield axios.get(`${process.env.REACT_APP_SERVER_URL}/users/token/${token}`, {
             headers: {
               'Authorization': `Bearer ${token}` 
             }

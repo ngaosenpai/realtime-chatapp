@@ -5,7 +5,6 @@ import './App.css';
 import {
   BrowserRouter as Router,
   Switch,
-  Route
 } from "react-router-dom";
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -29,7 +28,7 @@ function App() {
 
     dispatch({type : KEEP_SESSION})
 
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     console.log('re-render')
