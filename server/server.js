@@ -34,6 +34,7 @@ app.use(session({
     resave: true,
     saveUninitialized: false, 
     secret: process.env.SESSION_SECRET,
+    store: new MemoryStore(), 
 }));
 app.use(cookie(process.env.COOKIE_SECRET))
 
