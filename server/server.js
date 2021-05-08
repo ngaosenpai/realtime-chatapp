@@ -14,6 +14,7 @@ const socketio = require('socket.io')
 const http = require('http')
 const cors = require("cors")
 const path = require('path')
+var MemoryStore = require('memorystore')(session)
 
 const app = express();
 const server = http.createServer(app);
@@ -34,7 +35,9 @@ app.use(session({
     resave: true,
     saveUninitialized: false, 
     secret: process.env.SESSION_SECRET,
-    store: new MemoryStore(), 
+    store: MemoryStore({
+        checkPeriod: 86400000 // prune expired entries every 24h
+      }), 
 }));
 app.use(cookie(process.env.COOKIE_SECRET))
 
