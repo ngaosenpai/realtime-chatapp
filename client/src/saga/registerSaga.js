@@ -22,7 +22,7 @@ export function* workerRegister(action) {
 
         const response = yield axios({
             method: "post",
-            url: `${process.env.REACT_APP_SERVER_URL}/auths/register`,
+            url: `/auths/register`,
             data: data,
             headers: { "Content-Type": "multipart/form-data" },
 
