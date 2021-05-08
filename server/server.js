@@ -82,7 +82,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const PORT = process.env.SERVER_POST || 4000;
 
-server.listen( PORT, () => {
+server.listen( PORT, '0.0.0.0', () => {
     console.log(`server listening on port ${PORT}: ${process.env.REACT_APP_SERVER_URL}/`);
 })
 
