@@ -23,12 +23,28 @@ const server = http.createServer(app);
 const User = require("./models/user.model")
 const Message = require("./models/message.model")
 
+const whitelist = ['http://localhost:3000', 'http://localhost:4000', 'https://realtime-chatapp-wa-server.herokuapp.com', 'https://realtime-chatapp-wa-client.herokuapp.com']
+const corsOptions = {
+  origin: function (origin, callback) {
+    console.log("** Origin of request " + origin)
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      console.log("Origin acceptable")
+      callback(null, true)
+    } else {
+      console.log("Origin rejected")
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
 app.use('/public', express.static('public'));
-app.use(cors({
-    // origin: 'http://localhost:3000',
-    origin: process.env.REACT_APP_CLIENT_URL,
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}))
+// app.use(cors({
+//     // origin: 'http://localhost:3000',
+//     origin: process.env.REACT_APP_CLIENT_URL,
+//     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// }))
+
+app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session({
@@ -71,11 +87,11 @@ app.use('/', homeRoute)
 if (process.env.NODE_ENV === 'production') {
 
     // Set static folder
-    app.use(express.static(path.join(__dirname,"..", "client", "build",)));
+    app.use(express.static(path.join(__dirname,"../client/build")));
 
-    app.get("*", (req, res) => {
+    app.get("*", function (req, res) {
 
-        res.sendFile(path.resolve(__dirname, "..", "client", "build", "index.html"))
+        res.sendFile(path.join(__dirname, "../client/build", "index.html"))
         
     });
 }
