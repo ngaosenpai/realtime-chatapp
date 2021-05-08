@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm start --prefix server",
     "dev": "nodemon --inspect server.js",
-    "heroku-postbuild": "npm install --prefix client && npm install --prefix server && npm run build --prefix client"
+    "heroku-postbuild": "npm install --prefix client && npm install --prefix server"
   },
   "keywords": [],
   "author": "",
