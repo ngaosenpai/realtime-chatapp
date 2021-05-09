@@ -31,11 +31,11 @@ function UserList(props) {
             {
 
                 conversationList.map((item, i) => 
-                    <UserItem 
+                    {console.log(item); return  <UserItem 
                         key={i} 
                         id={i} 
                         data={item} 
-                    />
+                    />}
                 )
             }
         </div>

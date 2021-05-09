@@ -34,11 +34,13 @@ module.exports.getConversationList = async (req, res) => {
             console.log(contactedUsers[i])
             console.log(lastestMessages[i])
             conversation.name = contactedUsers[i].locals.name
+            conversation.image = contactedUsers[i].locals.image
             conversation.contactedId = contactedUsers[i]._id
             conversation.lastedMessage = lastestMessages[i][0] ? lastestMessages[i][0].content : null
             conversation.lastedTime = lastestMessages[i][0] ? lastestMessages[i][0].sentTime : null
     
             conversationList.push(conversation)
+            console.log(conversation)
         }
     
         res.json({

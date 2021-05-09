@@ -26,6 +26,7 @@ export const conversationReducer = (state = initialState, action) => {
 
             const tempList = [ ...action.payload.conversationList]
             tempList.sort((prev, next) => next.lastedTime - prev.lastedTime) //sap giam dan
+            console.log(tempList)
             return {
                 ...state,
                 isLoading : false,
@@ -44,6 +45,7 @@ export const conversationReducer = (state = initialState, action) => {
                 console.log("called")
                 
                 const { newMessage } = action.payload
+                console.log(newMessage)
                 const tempListPush = state.list
                 if (newMessage.newFriend === undefined){    
                     const founds = []
@@ -65,6 +67,7 @@ export const conversationReducer = (state = initialState, action) => {
                         
                         tempListPush.unshift({
                             name : founds[0][1].name,
+                            image : founds[0][1].image,
                             contactedId : founds[0][1].contactedId,
                             lastedMessage : newMessage.content,
                             lastedTime : newMessage.sentTime

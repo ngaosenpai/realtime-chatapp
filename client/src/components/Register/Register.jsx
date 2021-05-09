@@ -179,7 +179,7 @@ function Register(props) {
                                         className="register-form__body__img-uploader__img"
                                         src={content.previewImg}
                                         alt="Preview"
-                                        style={{ height: '250px', margin: '0 auto 20px auto'}}
+                                        style={{ height: '250px', margin: '0 auto 20px auto', width: "100%", objectFit: "cover" }}
                                     />
                                 )}
                             </div>

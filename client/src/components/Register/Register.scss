@@ -18,6 +18,8 @@
         justify-content: center;
         align-items: center;
         background-color: #e4e6eb;
+        padding: 2em 0;
+        // overflow-y: scroll;
     }
 
 }
@@ -28,6 +30,7 @@
     padding: 1.5em;
     display: flex;
     flex-direction: column;
+    
 
     background-color: #242526;
     border-radius: 20px;

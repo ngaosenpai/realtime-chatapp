@@ -34,7 +34,7 @@ export const socketMiddleware = storeAPI => next => action => {
             console.log("server send: ", data)
         })
         socket.on("server-make-conversation", function(data) {
-            let {user1, user2 } = data
+            let { user1, user2 } = data
             let targetUser  
             if(user1._id === user._id){
                 targetUser = user2
@@ -47,6 +47,7 @@ export const socketMiddleware = storeAPI => next => action => {
                 payload :  {
                     newMessage: {
                         name : targetUser.locals.name,
+                        image : targetUser.locals.image,
                         contactedId : targetUser._id,
                         receiverId: targetUser._id,
                         lastedMessage : "",

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from "react-redux"
 import {
     Switch,
     Route,
     useRouteMatch,
     useLocation
   } from "react-router-dom";
+
+import { UnorderedListOutlined } from '@ant-design/icons'
 
 import ChatMain from '../ChatMain/ChatMain';
 import LeftNav from '../LeftNav/LeftNav'
@@ -13,8 +16,9 @@ import Profile from '../Profile/Profile'
 import './RightMain.scss'
 function RightMain(props) {
 
-    const [shouldShowMenu, setShouldShowMenu] = useState(false)
-    
+    const [shouldShowMenu, setShouldShowMenu] = useState(true)
+    const { user } = useSelector(state => state.session)
+
     return (
         <div className="right-main">
             {/* this contain the Left nav for mobile device */}
@@ -34,7 +38,22 @@ function RightMain(props) {
                     <SearchResult/>
                 </Route>
                 <Route exact path={`/`}>
-                    <p>Wellcome</p>
+                    <div className="wellcome" >
+                        <div className="wellcome__header">
+                        {   !shouldShowMenu &&
+                            <div 
+                                style={{zIndex: "100"}}
+                                className="wellcome__header__icon-close" 
+                                onClick={() => setShouldShowMenu(pre => {console.log(pre); return !pre})}
+                            >
+                                <UnorderedListOutlined />
+                            </div>
+                        }
+                        </div>
+                        <div className="wellcome__body">
+                            {user.name} ơi! Bạn bè đang đợi đấy!
+                        </div>
+                    </div>
                 </Route>
             </Switch>
         </div>

@@ -14,3 +14,43 @@
         }
     }
 }
+
+
+.wellcome{
+    background-color: #242526;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    color: white;
+
+    &__header{
+        text-align: right;
+        padding: 1em;
+        position: relative;
+
+        &__icon-close{
+            
+            position: absolute;
+            top: 0;
+            z-index: 100;
+            cursor: pointer;
+            display: none;
+            @media screen and (max-width: 768px) {
+                display: inline-block;
+            }
+        }
+    }
+
+
+    &__body{
+        display: flex;
+        flex-grow: 1;
+        justify-content: center;
+        align-items: center;
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #6d6d6d;
+    }
+
+}
